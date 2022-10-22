@@ -7,12 +7,17 @@ import { CategoriesService } from './services/categories/categories.service';
 import { CompaniesService } from './services/companies/companies.service';
 import { ValorationService } from './services/valoration/valoration.service';
 import { Company, CompanySchema } from './schemas/companies.schema';
+import { Category, CategorySchema } from './schemas/categories.schema';
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
         name: Company.name,
         schema: CompanySchema,
+      },
+      {
+        name: Category.name,
+        schema: CategorySchema,
       },
     ]),
   ],
@@ -22,6 +27,6 @@ import { Company, CompanySchema } from './schemas/companies.schema';
     ValorationController,
   ],
   providers: [CategoriesService, CompaniesService, ValorationService],
-  exports: [CompaniesService],
+  exports: [CompaniesService, CategoriesService],
 })
 export class CompaniesModule {}
