@@ -7,7 +7,6 @@ import {
 import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/role.decorator';
-import { PayloadToken } from '../models/payload.model';
 import { Role } from '../schemas/auth.schema';
 
 @Injectable()
@@ -22,7 +21,7 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     const request = context.switchToHttp().getRequest();
-    const user = request.user as PayloadToken;
+    const user = request.user;
     const hasRole = () => roles.some((role) => role === user.role);
     if (user && user.role && hasRole()) {
       return true;
