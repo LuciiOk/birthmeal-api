@@ -12,7 +12,6 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthDTO, LoginDTO } from '../dtos/auth.dto';
 import { Auth } from '../schemas/auth.schema';
 import { PayloadToken } from '../models/Payload.model';
-import { User } from '../schemas/user.schema';
 
 @Injectable()
 export class AuthService {
