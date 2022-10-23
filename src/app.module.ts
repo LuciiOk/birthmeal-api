@@ -22,8 +22,9 @@ import { DatabaseModule } from './database/database.module';
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.string().required(),
-        DATABASE_NAME: Joi.string().required(),
-        DATABASE_PORT: Joi.number().required(),
+        MONGO_DB: Joi.string().required(),
+        MONGO_INITDB_ROOT_USERNAME: Joi.string().required(),
+        MONGO_INITDB_ROOT_PASSWORD: Joi.string().required(),
       }),
     }),
     DatabaseModule,
