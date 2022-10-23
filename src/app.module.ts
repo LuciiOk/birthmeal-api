@@ -20,7 +20,6 @@ import { DatabaseModule } from './database/database.module';
       load: [config],
       isGlobal: true,
       validationSchema: Joi.object({
-        API_KEY: Joi.number().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
