@@ -14,7 +14,7 @@ export class UserService {
     private authService: AuthService,
   ) {}
 
-  async create(user: CreateUserDTO): Promise<Auth> {
+  async create(user: CreateUserDTO) {
     const newUser = await this.userModel.create(user);
     const userExists = await this.authService.findOneByEmail(
       user.userAuth.email,
@@ -27,7 +27,8 @@ export class UserService {
       confirmPassword: user.userAuth.confirmPassword,
       user: newUser._id,
     });
-    return auth;
+    const token = await this.authService.generateJWT(auth);
+    return token;
   }
 
   async findOne(_id: string): Promise<User> {
