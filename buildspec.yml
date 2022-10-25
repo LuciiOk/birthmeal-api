@@ -1,0 +1,22 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - apt-get update
+      - npm install -g typescript
+      - npm install
+  pre_build:
+    commands:
+      - echo Nothing to do in build phase.
+  build:
+    commands:
+      - npm run start:prod
+  post_build:
+    commands:
+      - echo Nothing to do in build phase.
+artifacts:
+  files:
+    - dist/*/
+    - package.json
+  name: birthmeal-$(date +%Y-%m-%d-%H:%M:%S)
