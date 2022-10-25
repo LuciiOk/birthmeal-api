@@ -35,13 +35,8 @@ export class CompaniesController {
     return this.companyService.remove(id);
   }
 
-  @Get('/companies')
+  @Get('')
   findAll() {
     return this.companyService.findAll();
   }
-
-  /*@Get('/business')
-  search() {
-    return this.companyService.find();
-  }*/
 }

@@ -12,7 +12,9 @@ import { Auth, AuthSchema } from './schemas/auth.schema';
 import { Role, RoleSchema } from './schemas/role.schema';
 import { User, UserSchema } from './schemas/user.schema';
 import { UserService } from './services/user.service';
+import { UserController } from './controllers/user.controller';
 import config from 'src/config';
+import { CompaniesModule } from 'src/companies/companies.module';
 
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import config from 'src/config';
       },
     ]),
     PassportModule,
+    CompaniesModule,
     JwtModule.registerAsync({
       inject: [config.KEY],
       useFactory: (configService: ConfigType<typeof config>) => ({
@@ -39,7 +42,7 @@ import config from 'src/config';
       }),
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, UserController],
   providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
   exports: [AuthService, UserService],
 })

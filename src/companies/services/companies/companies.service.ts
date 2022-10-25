@@ -32,4 +32,10 @@ export class CompaniesService {
   remove(id: string) {
     return this.companyModel.findByIdAndDelete(id);
   }
+
+  async findOne(id: string): Promise<Company> {
+    const company = await this.companyModel.findById(id).exec();
+    if (!company) throw new NotFoundException(`Company #${id} not found`);
+    return company;
+  }
 }
