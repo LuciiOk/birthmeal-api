@@ -9,6 +9,8 @@ export class Company extends Document {
   description: string;
   @Prop({ type: Number })
   rating: number;
+  @Prop({ required: true })
+  webUrl: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

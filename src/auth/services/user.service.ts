@@ -1,8 +1,8 @@
 import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CompaniesService } from 'src/companies/services/companies/companies.service';
 import { CreateUserDTO } from '../dtos/user.dto';
-import { Auth } from '../schemas/auth.schema';
 import { User } from '../schemas/user.schema';
 
 import { AuthService } from './auth.service';
@@ -12,6 +12,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private authService: AuthService,
+    private CompanyService: CompaniesService,
   ) {}
 
   async create(user: CreateUserDTO) {
@@ -42,6 +43,21 @@ export class UserService {
   }
 
   async update(_id: string, user: User): Promise<User> {
+    return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
+  }
+
+  async addCompanyToFavorites(_id: string, company: string): Promise<User> {
+    const user = await this.userModel.findById(_id).exec();
+    if (!user) throw new BadRequestException('User not found');
+    const companyExists = await this.CompanyService.findOne(company);
+    if (!companyExists)
+      throw new BadRequestException('Company not found, try again');
+    const index = user.favorites.indexOf(companyExists._id);
+    if (index === -1) {
+      user.favorites.push(companyExists);
+      return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
+    }
+    user.favorites.splice(index, 1);
     return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
   }
 }

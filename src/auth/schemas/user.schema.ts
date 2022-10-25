@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Type } from 'class-transformer';
 
-import { Birthdate } from 'src/birthdays/schemas/Birthdate.schema';
+import { Company } from 'src/companies/schemas/companies.schema';
 
 @Schema()
 export class User extends Document {
@@ -11,6 +10,10 @@ export class User extends Document {
 
   @Prop({ required: true })
   birthdate: Date;
+
+  // many-to-many relationship favorites with Companies Schema
+  @Prop({ type: [{ type: Types.ObjectId, ref: Company.name }] })
+  favorites: Company[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
