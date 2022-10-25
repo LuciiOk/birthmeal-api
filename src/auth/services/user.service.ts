@@ -60,4 +60,27 @@ export class UserService {
     user.favorites.splice(index, 1);
     return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
   }
+
+  async getFavoriteCompanies(_id: string, page, limit): Promise<any> {
+    const user = await this.userModel
+      .findById(_id)
+      .populate('favorites')
+      .exec();
+    if (!user) throw new BadRequestException('User not found');
+    const favorites = user.favorites;
+    const total = favorites.length;
+    const totalPages = Math.ceil(total / limit);
+    const offset = limit * (page - 1);
+    const paginatedFavorites = favorites.slice(offset).slice(0, limit);
+    return { total, totalPages, page, limit, paginatedFavorites };
+  }
+
+  async getFavoriteCompany(_id: string, company: string): Promise<boolean> {
+    const user = await this.userModel
+      .findById(_id)
+      .exec();
+    if (!user) throw new BadRequestException('User not found');
+    const favorites = user.favorites;
+    return favorites.some((favorite) => favorite._id == company);
+  }
 }
