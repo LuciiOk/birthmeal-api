@@ -12,6 +12,7 @@ import { BirthdaysModule } from './birthdays/birthdays.module';
 
 import config from './config';
 import { DatabaseModule } from './database/database.module';
+import { GoogleMapsModule } from './google-maps/google-maps.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DatabaseModule } from './database/database.module';
         MONGO_DB: Joi.string().required(),
         MONGO_INITDB_ROOT_USERNAME: Joi.string().required(),
         MONGO_INITDB_ROOT_PASSWORD: Joi.string().required(),
+        GOOGLE_MAPS_ACCESS_KEY: Joi.string().required(),
       }),
     }),
     DatabaseModule,
@@ -32,6 +34,7 @@ import { DatabaseModule } from './database/database.module';
     CompaniesModule,
     LocationsModule,
     BirthdaysModule,
+    GoogleMapsModule,
   ],
   controllers: [AppController, CompaniesController],
   providers: [AppService],

@@ -65,4 +65,11 @@ export class AuthService {
       user,
     };
   }
+
+  async forgotPassword(email: string) {
+    const user = await this.findOneByEmail(email);
+    if (!user)
+      throw new HttpException('El correo no existe', HttpStatus.NOT_FOUND);
+    return user;
+  }
 }

@@ -7,8 +7,12 @@ import { User } from '../../auth/schemas/user.schema';
 export class Birthdate extends Document {
   @Prop({ required: true })
   name: string;
+
   @Prop({ required: true })
   birthdate: Date;
+
+  @Prop()
+  remind: boolean;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: User.name })
   user: User;

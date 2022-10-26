@@ -14,5 +14,8 @@ export default registerAs('config', () => {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_EXPIRES_IN,
     },
+    googleMaps: {
+      accessKey: process.env.GOOGLE_MAPS_ACCESS_KEY,
+    },
   };
 });

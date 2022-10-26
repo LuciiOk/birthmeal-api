@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsPositive, IsString } from 'class-validator';
 
 export class BirthdateDto {
   @ApiProperty()
@@ -10,6 +10,10 @@ export class BirthdateDto {
   @IsNumber()
   @IsPositive()
   birthdate: number;
+
+  @ApiProperty()
+  @IsBoolean()
+  remind: boolean;
 }
 
 export class UpdateBirthdateDto extends PartialType(BirthdateDto) {}

@@ -1,11 +1,34 @@
 import { Module } from '@nestjs/common';
-import { CoordsController } from './controllers/coords/coords.controller';
-import { LocationsController } from './controllers/locations/locations.controller';
-import { CoordsService } from './services/coords/coords.service';
-import { LocationsService } from './services/locations/locations.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { LocationsController } from './controllers/locations.controller';
+import {
+  GeoLocationSchema,
+  LocationSchema,
+  Location,
+  GeoLocation,
+} from './schemas/locations.schema';
+import { RegionSchema, Region } from './schemas/region.schema';
+import { LocationsService } from './services/locations.service';
+import { RegionService } from './services/region.service';
 
 @Module({
-  controllers: [CoordsController, LocationsController],
-  providers: [CoordsService, LocationsService]
+  imports: [
+    MongooseModule.forFeature([
+      {
+        name: Location.name,
+        schema: LocationSchema,
+      },
+      {
+        name: GeoLocation.name,
+        schema: GeoLocationSchema,
+      },
+      {
+        name: Region.name,
+        schema: RegionSchema,
+      },
+    ]),
+  ],
+  controllers: [LocationsController],
+  providers: [LocationsService, RegionService],
 })
 export class LocationsModule {}
