@@ -26,6 +26,7 @@ import { GoogleMapsModule } from './google-maps/google-maps.module';
         MONGO_DB: Joi.string().required(),
         MONGO_INITDB_ROOT_USERNAME: Joi.string().required(),
         MONGO_INITDB_ROOT_PASSWORD: Joi.string().required(),
+        GOOGLE_MAPS_ACCESS_KEY: Joi.string().required(),
       }),
     }),
     DatabaseModule,
