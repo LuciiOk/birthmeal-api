@@ -12,6 +12,7 @@ import { BirthdaysModule } from './birthdays/birthdays.module';
 
 import config from './config';
 import { DatabaseModule } from './database/database.module';
+import { GoogleMapsModule } from './google-maps/google-maps.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { DatabaseModule } from './database/database.module';
     CompaniesModule,
     LocationsModule,
     BirthdaysModule,
+    GoogleMapsModule,
   ],
   controllers: [AppController, CompaniesController],
   providers: [AppService],
