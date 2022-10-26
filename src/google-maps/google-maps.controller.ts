@@ -1,3 +1,4 @@
+import { Param } from '@nestjs/common';
 import { Controller, Get } from '@nestjs/common';
 import { GoogleMapsService } from './google-maps.service';
 
@@ -13,5 +14,11 @@ export class GoogleMapsController {
       region: 'Santiago',
     });
     return coordinates;
+  }
+
+  @Get(':name_place')
+  async getPlace(@Param('name_place') name_place: string) {
+    const place = await this.googleMapsService.getPlace(name_place);
+    return place;
   }
 }
