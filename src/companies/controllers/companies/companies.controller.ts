@@ -12,13 +12,15 @@ import {
 import { CompanyDto, UpdateCompanyDto } from 'src/companies/dtos/companies.dto';
 import { CompaniesService } from 'src/companies/services/companies/companies.service';
 
-import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('companies')
 export class CompaniesController {
   constructor(private companyService: CompaniesService) {}
 
-  @UseGuards(AuthGuard)
+  @Public()
   @Post()
   create(@Body() user: CompanyDto) {
     return this.companyService.create(user);
@@ -29,12 +31,12 @@ export class CompaniesController {
     return this.companyService.update(id, user);
   }
 
-  @UseGuards(AuthGuard)
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.companyService.remove(id);
   }
 
+  @Public()
   @Get('')
   findAll() {
     return this.companyService.findAll();

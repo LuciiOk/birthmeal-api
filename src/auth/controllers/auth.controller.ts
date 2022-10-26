@@ -10,6 +10,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { SanitizeMongooseModelInterceptor } from 'nestjs-mongoose-exclude';
 import { Public } from '../decorators/public.decorator';
+import { ForgotPasswordDto } from '../dtos/forgotPassword.dto';
 
 import { CreateUserDTO } from '../dtos/user.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -47,4 +48,9 @@ export class AuthController {
 
   @Post('logout')
   public async logout(@Req() req: Request) {}
+
+  @Post('forgot-password')
+  public async forgotPassword(@Body() email: ForgotPasswordDto) {
+    // return this.authService.forgotPassword(email);
+  }
 }

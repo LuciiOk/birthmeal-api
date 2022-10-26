@@ -9,7 +9,6 @@ import {
   Param,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Public } from '../decorators/public.decorator';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { PayloadToken } from '../models/Payload.model';
 import { UserService } from '../services/user.service';
