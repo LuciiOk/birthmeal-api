@@ -20,26 +20,17 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: create env file
-      # JWT_SECRET: H!JS@G#FFG#s%dfg@sdfdgsdfagDFGDFDAH@#FJK@432?D
-      # JWT_EXPIRES_IN: 20h
-      # GOOGLE_MAPS_ACCESS_KEY: AIzaSyDsadPAbIgJa8JNvCGwPWVBY0NUn5MKcoE
-      # MONGO_INITDB_ROOT_USERNAME: birthmeal
-      # MONGO_INITDB_ROOT_PASSWORD: birthmeal
-      # MONGO_DB: Birthmeal
-      # MONGO_CONNECTION: mongodb
-      # MONGO_HOST: 45.7.231.52
-      # MONGO_PORT: 27017
       run: |
         touch .env
-        echo "JWT_SECRET=H!JS@G#FFG#s%dfg@sdfdgsdfagDFGDFDAH@#FJK@432?D" >> .env
-        echo "JWT_EXPIRES_IN=20h" >> .env
-        echo "GOOGLE_MAPS_ACCESS_KEY=AIzaSyDsadPAbIgJa8JNvCGwPWVBY0NUn5MKcoE" >> .env
-        echo "MONGO_INITDB_ROOT_USERNAME=birthmeal" >> .env
-        echo "MONGO_INITDB_ROOT_PASSWORD=birthmeal" >> .env
-        echo "MONGO_DB=Birthmeal" >> .env
-        echo "MONGO_CONNECTION=mongodb" >> .env
-        echo "MONGO_HOST=
-        echo "MONGO_PORT=27017" >> .env
+        echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
+        echo JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }} >> .env
+        echo GOOGLE_MAPS_ACCESS_KEY=${{ secrets.GOOGLE_MAPS_ACCESS_KEY }} >> .env
+        echo MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} >> .env
+        echo MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} >> .env
+        echo MONGO_DB=${{ secrets.MONGO_DB }} >> .env
+        echo MONGO_CONNECTION=${{ secrets.MONGO_CONNECTION }} >> .env
+        echo MONGO_HOST=${{ secrets.MONGO_HOST }} >> .env
+        echo MONGO_PORT=${{ secrets.MONGO_PORT }} >> .env
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
