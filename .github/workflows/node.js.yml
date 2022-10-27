@@ -31,6 +31,7 @@ jobs:
         MONGO_HOST: ${{ secrets.MONGO_HOST }}
         MONGO_CONNECTION: ${{ secrets.MONGO_CONNECTION }}
         HOLA: ${{ secrets.HOLA }}
+        PRUEBA: fhjsdhfjdskfsd
       run: |
         echo HOLA=$HOLA >> $GITHUB_ENV
         echo GITHUB_TOKEN=$GITHUB_TOKEN >> .env
