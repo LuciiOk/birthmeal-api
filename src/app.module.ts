@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CompaniesModule } from './companies/companies.module';
 import { LocationsModule } from './locations/locations.module';
@@ -37,6 +36,6 @@ import { GoogleMapsModule } from './google-maps/google-maps.module';
     GoogleMapsModule,
   ],
   controllers: [AppController, CompaniesController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}
