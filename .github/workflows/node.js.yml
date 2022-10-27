@@ -20,6 +20,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: get variables from secret (github actions) and put it on .env file
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
         JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
         GOOGLE_MAPS_ACCESS_KEY: ${{ secrets.GOOGLE_MAPS_ACCESS_KEY }}
@@ -30,6 +31,7 @@ jobs:
         MONGO_HOST: ${{ secrets.MONGO_HOST }}
         MONGO_CONNECTION: ${{ secrets.MONGO_CONNECTION }}
       run: |
+        echo GITHUB_TOKEN=$GITHUB_TOKEN >> .env
         echo "JWT_SECRET=$JWT_SECRET" >> .env
         echo "JWT_EXPIRES_IN=$JWT_EXPIRES_IN" >> .env
         echo "GOOGLE_MAPS_ACCESS_KEY=$GOOGLE_MAPS_ACCESS_KEY" >> .env
