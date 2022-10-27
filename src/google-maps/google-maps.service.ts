@@ -4,13 +4,13 @@ import {
   PlaceInputType,
 } from '@googlemaps/google-maps-services-js';
 import { HttpException, Inject, Injectable } from '@nestjs/common';
+import { Location } from 'src/locations/schemas/locations.schema';
 
 @Injectable()
 export class GoogleMapsService extends Client {
   constructor(@Inject('GOOGLE_MAPS') private accessKey: string) {
     super();
   }
-  // get coordinates by chilean address
   async getCoordinates({ address, commune, region }): Promise<LatLngLiteral> {
     try {
       const { data } = await this.geocode({
@@ -27,12 +27,10 @@ export class GoogleMapsService extends Client {
     }
   }
 
-  // get all places by name and country without coordinates
   async getPlace(name_place: string): Promise<any> {
     try {
       const { data } = await this.placesNearby({
         params: {
-          // coordinates of viña del mar
           location: { lat: -33.024, lng: -71.552 },
           radius: 1000000,
           keyword: name_place,
@@ -40,10 +38,44 @@ export class GoogleMapsService extends Client {
         },
       });
       const { results } = data;
-      return results;
+      const places = results.map((place) => {
+        const { geometry, name, vicinity: address, place_id: _id } = place;
+        return {
+          geometry,
+          name,
+          address,
+          _id,
+        };
+      });
+      return places;
     } catch (error) {
       console.log(error);
       throw new HttpException('Error getting place', 500);
+    }
+  }
+
+  async getStreet(coordinates: LatLngLiteral): Promise<any> {
+    try {
+      const { data } = await this.reverseGeocode({
+        params: {
+          latlng: coordinates,
+          key: this.accessKey,
+        },
+      });
+      // get commune, region and commune
+      const { results } = data;
+      const { address_components } = results[0];
+      const street = address_components[0].long_name;
+      const commune = address_components[1].long_name;
+      const region = address_components[2].long_name;
+      return {
+        street,
+        commune,
+        region,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException('Error getting street', 500);
     }
   }
 }
