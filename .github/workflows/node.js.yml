@@ -16,22 +16,29 @@ jobs:
       matrix:
         node-version: [14.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v3
-    - name: create env file
+    - name: get secrets environment variables and set them in the .env file
+      env:
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        JWT_EXPIRES_IN: ${{ secrets.JWT_EXPIRES_IN }}
+        GOOGLE_MAPS_ACCESS_KEY: ${{ secrets.GOOGLE_MAPS_ACCESS_KEY }}
+        MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
+        MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+        MONGO_DB: ${{ secrets.MONGO_DB }}
+        MONGO_PORT: ${{ secrets.MONGO_PORT }}
+        MONGO_HOST: ${{ secrets.MONGO_HOST }}
+        MONGO_CONNECTION: ${{ secrets.MONGO_CONNECTION }}
       run: |
-        touch .env
-        echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env
-        echo JWT_EXPIRES_IN=${{ secrets.JWT_EXPIRES_IN }} >> .env
-        echo GOOGLE_MAPS_ACCESS_KEY=${{ secrets.GOOGLE_MAPS_ACCESS_KEY }} >> .env
-        echo MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} >> .env
-        echo MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} >> .env
-        echo MONGO_DB=${{ secrets.MONGO_DB }} >> .env
-        echo MONGO_CONNECTION=${{ secrets.MONGO_CONNECTION }} >> .env
-        echo MONGO_HOST=${{ secrets.MONGO_HOST }} >> .env
-        echo MONGO_PORT=${{ secrets.MONGO_PORT }} >> .env
-    - name: Use Node.js ${{ matrix.node-version }}
+        echo "JWT_SECRET=$JWT_SECRET" >> .env
+        echo "JWT_EXPIRES_IN=$JWT_EXPIRES_IN" >> .env
+        echo "GOOGLE_MAPS_ACCESS_KEY=$GOOGLE_MAPS_ACCESS_KEY" >> .env
+        echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME" >> .env
+        echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD" >> .env
+        echo "MONGO_DB=$MONGO_DB" >> .env
+        echo "MONGO_PORT=$MONGO_PORT" >> .env
+        echo "MONGO_HOST=$MONGO_HOST" >> .env
+        echo "MONGO_CONNECTION=$MONGO_CONNECTION" >> .env
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
