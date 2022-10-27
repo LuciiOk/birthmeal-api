@@ -49,5 +49,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm run deploy
-    - run: nohup npm run start >/dev/null 2>&1 &
-    
+
