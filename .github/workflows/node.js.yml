@@ -30,20 +30,20 @@ jobs:
         MONGO_HOST: ${{ secrets.MONGO_HOST }}
         MONGO_CONNECTION: ${{ secrets.MONGO_CONNECTION }}
       run: |
-        echo "JWT_SECRET=$JWT_SECRET" >> $GITHUB_ENV
-        echo "JWT_EXPIRES_IN=$JWT_EXPIRES_IN" >> $GITHUB_ENV
-        echo "GOOGLE_MAPS_ACCESS_KEY=$GOOGLE_MAPS_ACCESS_KEY" >> $GITHUB_ENV
-        echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME" >> $GITHUB_ENV
-        echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD" >> $GITHUB_ENV
-        echo "MONGO_DB=$MONGO_DB" >> $GITHUB_ENV
-        echo "MONGO_PORT=$MONGO_PORT" >> $GITHUB_ENV
-        echo "MONGO_HOST=$MONGO_HOST" >> $GITHUB_ENV
-        echo "MONGO_CONNECTION=$MONGO_CONNECTION" >> $GITHUB_ENV
+        echo "JWT_SECRET=$JWT_SECRET" >> .env
+        echo "JWT_EXPIRES_IN=$JWT_EXPIRES_IN" >> .env
+        echo "GOOGLE_MAPS_ACCESS_KEY=$GOOGLE_MAPS_ACCESS_KEY" >> .env
+        echo "MONGO_INITDB_ROOT_USERNAME=$MONGO_INITDB_ROOT_USERNAME" >> .env
+        echo "MONGO_INITDB_ROOT_PASSWORD=$MONGO_INITDB_ROOT_PASSWORD" >> .env
+        echo "MONGO_DB=$MONGO_DB" >> .env
+        echo "MONGO_PORT=$MONGO_PORT" >> .env
+        echo "MONGO_HOST=$MONGO_HOST" >> .env
+        echo "MONGO_CONNECTION=$MONGO_CONNECTION" >> .env
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm run deploy
-    - run: npm run start
+    - run: nohup npm run start > /dev/null 2>&1 &
     
