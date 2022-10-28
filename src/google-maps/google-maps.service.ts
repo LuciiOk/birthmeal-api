@@ -1,4 +1,4 @@
-import { Client, LatLngLiteral } from '@googlemaps/google-maps-services-js';
+import { Client, LatLngLiteral, PlaceData } from '@googlemaps/google-maps-services-js';
 import { HttpException, Inject, Injectable } from '@nestjs/common';
 import { GetCordinatesDto } from './dtos/Coordinates.dtop';
 
@@ -45,7 +45,8 @@ export class GoogleMapsService extends Client {
           name,
           vicinity: address,
           place_id: _id,
-        } = place;
+          
+        } = place as PlaceData;
 
         const geometry = {
           coordinates: [geometryA.location.lng, geometryA.location.lat],
