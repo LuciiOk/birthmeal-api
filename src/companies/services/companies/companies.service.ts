@@ -38,4 +38,10 @@ export class CompaniesService {
     if (!company) throw new NotFoundException(`Company #${id} not found`);
     return company;
   }
+
+  async findByCategory(id: string): Promise<Company[]> {
+    const company = await this.companyModel.find({ category: id }).exec();
+    if (!company) throw new NotFoundException(`Company #${id} not found`);
+    return company;
+  }
 }

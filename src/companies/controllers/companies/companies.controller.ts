@@ -41,4 +41,10 @@ export class CompaniesController {
   findAll() {
     return this.companyService.findAll();
   }
+
+  @Public()
+  @Get('category/:id')
+  findByCategory(@Param('id') id: string) {
+    return this.companyService.findByCategory(id);
+  }
 }
