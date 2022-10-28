@@ -7,10 +7,7 @@ export class GoogleMapsService extends Client {
   constructor(@Inject('GOOGLE_MAPS') private accessKey: string) {
     super();
   }
-  async getCoordinates({
-    street,
-    commune,
-  }: GetCordinatesDto): Promise<any> {
+  async getCoordinates({ street, commune }: GetCordinatesDto): Promise<any> {
     try {
       const address = `${street}`;
       const { data } = await this.geocode({
@@ -43,7 +40,17 @@ export class GoogleMapsService extends Client {
       });
       const { results } = data;
       const places = results.map((place) => {
-        const { geometry, name, vicinity: address, place_id: _id } = place;
+        const {
+          geometry: geometryA,
+          name,
+          vicinity: address,
+          place_id: _id,
+        } = place;
+
+        const geometry = {
+          coordinates: [geometryA.location.lng, geometryA.location.lat],
+        };
+
         return {
           geometry,
           name,
