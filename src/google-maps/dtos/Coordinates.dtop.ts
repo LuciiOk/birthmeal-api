@@ -1,16 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class GetCordinatesDto {
   @IsString()
   @ApiProperty()
-  address: string;
+  street: string;
 
   @IsString()
   @ApiProperty()
   commune: string;
 
   @IsString()
+  @IsOptional()
   @ApiProperty()
-  region: string;
+  region?: string;
 }

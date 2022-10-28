@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { GoogleMapsModule } from 'src/google-maps/google-maps.module';
 import { LocationsController } from './controllers/locations.controller';
 import {
   GeoLocationSchema,
@@ -27,6 +28,7 @@ import { RegionService } from './services/region.service';
         schema: RegionSchema,
       },
     ]),
+    GoogleMapsModule,
   ],
   controllers: [LocationsController],
   providers: [LocationsService, RegionService],

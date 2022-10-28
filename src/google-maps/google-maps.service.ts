@@ -1,26 +1,30 @@
-import {
-  Client,
-  LatLngLiteral,
-  PlaceInputType,
-} from '@googlemaps/google-maps-services-js';
+import { Client, LatLngLiteral } from '@googlemaps/google-maps-services-js';
 import { HttpException, Inject, Injectable } from '@nestjs/common';
-import { Location } from 'src/locations/schemas/locations.schema';
+import { GetCordinatesDto } from './dtos/Coordinates.dtop';
 
 @Injectable()
 export class GoogleMapsService extends Client {
   constructor(@Inject('GOOGLE_MAPS') private accessKey: string) {
     super();
   }
-  async getCoordinates({ address, commune, region }): Promise<LatLngLiteral> {
+  async getCoordinates({
+    street,
+    commune,
+  }: GetCordinatesDto): Promise<any> {
     try {
+      const address = `${street}`;
       const { data } = await this.geocode({
         params: {
-          address: `${address}, ${commune}, ${region}`,
+          address: `${address}, ${commune}, Valparaiso, Chile`,
           key: this.accessKey,
         },
       });
-      const { lat, lng } = data.results[0].geometry.location;
-      return { lat, lng } as LatLngLiteral;
+      const { results } = data;
+      const { lat, lng } = results[0].geometry.location;
+      return {
+        coordinates: [lng, lat],
+        address: results[0].formatted_address,
+      };
     } catch (error) {
       console.log(error);
       throw new HttpException('Error getting coordinates', 500);

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Db } from 'mongodb';
 import { Model } from 'mongoose';
+import { GoogleMapsService } from 'src/google-maps/google-maps.service';
 import { GeoLocation, Location } from '../schemas/locations.schema';
 
 @Injectable()
@@ -10,16 +11,24 @@ export class LocationsService {
     @InjectModel(Location.name) private locationModel: Model<Location>,
     @InjectModel(GeoLocation.name) private geoLocationModel: Model<GeoLocation>,
     @Inject('MONGO') private database: Db,
+    private readonly googleMapsService: GoogleMapsService,
   ) {}
 
   async createLocation(location: Location): Promise<Location> {
     const createdLocation = new this.locationModel(location);
-    return createdLocation.save();
-  }
 
-  async createGeoLocation(geoLocation: GeoLocation): Promise<GeoLocation> {
-    const createdGeoLocation = new this.geoLocationModel(geoLocation);
-    return createdGeoLocation.save();
+    const { coordinates, address } =
+      await this.googleMapsService.getCoordinates({
+        street: location.address,
+        commune: location.commune,
+      });
+
+    createdLocation.address = address;
+    createdLocation.geometry = {
+      coordinates: coordinates as number[],
+    } as GeoLocation;
+
+    return createdLocation.save();
   }
 
   async getLocations(): Promise<Location[]> {

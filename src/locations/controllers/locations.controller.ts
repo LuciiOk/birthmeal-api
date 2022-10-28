@@ -15,12 +15,12 @@ export class LocationsController {
     return this.locationsService.createLocation(location);
   }
 
-  @Post('geo')
-  async createGeoLocation(
-    @Body() geoLocation: GeoLocation,
-  ): Promise<GeoLocation> {
-    return this.locationsService.createGeoLocation(geoLocation);
-  }
+  // @Post('geo')
+  // async createGeoLocation(
+  //   @Body() geoLocation: GeoLocation,
+  // ): Promise<GeoLocation> {
+  //   return this.locationsService.createGeoLocation(geoLocation);
+  // }
 
   @Post('nearests/:companyId')
   async getNearestLocations(

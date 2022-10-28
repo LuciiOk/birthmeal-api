@@ -15,5 +15,6 @@ import config from 'src/config';
     },
     GoogleMapsService,
   ],
+  exports: [GoogleMapsService],
 })
 export class GoogleMapsModule {}
