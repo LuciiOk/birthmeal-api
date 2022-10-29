@@ -72,7 +72,7 @@ export class UserService {
     const totalPages = Math.ceil(total / limit);
     const offset = limit * (page - 1);
     const paginatedFavorites = favorites.slice(offset).slice(0, limit);
-    return { total, totalPages, page, limit, paginatedFavorites };
+    return { total, totalPages, page, limit, data: paginatedFavorites };
   }
 
   async getFavoriteCompany(_id: string, company: string): Promise<boolean> {
