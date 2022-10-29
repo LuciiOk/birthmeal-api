@@ -10,8 +10,9 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 import { AuthDTO, LoginDTO } from '../dtos/auth.dto';
-import { Auth } from '../schemas/auth.schema';
+import { Auth, Role } from '../schemas/auth.schema';
 import { PayloadToken } from '../models/Payload.model';
+import { CreateAdminDTO } from '../dtos/CreateAdminDto';
 
 @Injectable()
 export class AuthService {
@@ -31,16 +32,35 @@ export class AuthService {
   }
 
   async create(auth: AuthDTO): Promise<Auth> {
-    if (auth.password !== auth.confirmPassword)
-      throw new BadRequestException('Passwords do not match');
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(auth.password, salt);
-    const result = await this.authModel.create({
-      ...auth,
-      password: hashedPassword,
-    });
+    try {
+      if (auth.password !== auth.confirmPassword)
+        throw new BadRequestException('Passwords do not match');
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(auth.password, salt);
+      const result = await this.authModel.create({
+        ...auth,
+        password: hashedPassword,
+      });
 
-    return result.save();
+      return result.save();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  async createAdmin(newadmin: CreateAdminDTO): Promise<Auth> {
+    try {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(newadmin.password, salt);
+      const result = await this.authModel.create({
+        ...newadmin,
+        password: hashedPassword,
+        role: Role.ADMIN,
+      });
+      return result.save();
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async validateUser(auth: LoginDTO) {
@@ -55,15 +75,19 @@ export class AuthService {
   }
 
   async generateJWT(user: Auth) {
-    const payload: PayloadToken = {
-      sub: user._id,
-      role: user.role,
-      userID: user.user._id,
-    };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user,
-    };
+    try {
+      const payload: PayloadToken = {
+        sub: user._id,
+        role: user.role,
+        userID: user.user?._id || null,
+      };
+      return {
+        access_token: this.jwtService.sign(payload),
+        user,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async forgotPassword(email: string) {

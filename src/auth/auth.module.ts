@@ -15,6 +15,7 @@ import { UserService } from './services/user.service';
 import { UserController } from './controllers/user.controller';
 import config from 'src/config';
 import { CompaniesModule } from 'src/companies/companies.module';
+import { AdminStrategy } from './strategies/admin.strategy';
 
 @Module({
   imports: [
@@ -43,7 +44,7 @@ import { CompaniesModule } from 'src/companies/companies.module';
     }),
   ],
   controllers: [AuthController, UserController],
-  providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, UserService, LocalStrategy, JwtStrategy, AdminStrategy],
   exports: [AuthService, UserService],
 })
 export class AuthModule {}

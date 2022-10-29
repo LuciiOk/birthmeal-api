@@ -9,7 +9,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { SanitizeMongooseModelInterceptor } from 'nestjs-mongoose-exclude';
-import { Public } from '../decorators/public.decorator';
+import { CreateAdminDTO } from '../dtos/CreateAdminDto';
 import { ForgotPasswordDto } from '../dtos/forgotPassword.dto';
 
 import { CreateUserDTO } from '../dtos/user.dto';
@@ -32,7 +32,6 @@ export class AuthController {
   ) {}
 
   @UseGuards(AuthGuard('LOCAL'))
-  @Public()
   @Post('login')
   public async login(@Req() req: Request) {
     const user = req.user as Auth;
@@ -47,7 +46,12 @@ export class AuthController {
     return this.authService.generateJWT(user);
   }
 
-  @Public()
+  @UseGuards(JwtAuthGuard)
+  @Post('admin/register')
+  public async adminRegister(@Body() createUser: CreateAdminDTO) {
+    return this.authService.createAdmin(createUser);
+  }
+
   @Post('register')
   public async register(@Body() createUser: CreateUserDTO) {
     return this.userService.create(createUser);

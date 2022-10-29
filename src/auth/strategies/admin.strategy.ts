@@ -14,10 +14,14 @@ export class AdminStrategy extends PassportStrategy(Strategy, 'ADMIN') {
   }
 
   async validate(email: string, password: string) {
-    const user = await this.authService.validateUser({ email, password });
-    if (!user || user.role !== Role.ADMIN) {
+    try {
+      const user = await this.authService.validateUser({ email, password });
+      if (!user || user.role !== Role.ADMIN) {
+        throw new UnauthorizedException('Invalid credentials');
+      }
+      return user;
+    } catch (error) {
       throw new UnauthorizedException('Invalid credentials');
     }
-    return user;
   }
 }
