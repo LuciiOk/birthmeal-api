@@ -24,7 +24,6 @@ import { UserService } from '../services/user.service';
     excludeMongooseV: true,
   }),
 )
-@UseGuards(JwtAuthGuard)
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -36,6 +35,14 @@ export class AuthController {
   @Public()
   @Post('login')
   public async login(@Req() req: Request) {
+    const user = req.user as Auth;
+    return this.authService.generateJWT(user);
+  }
+
+  // admin login
+  @UseGuards(AuthGuard('ADMIN'))
+  @Post('admin/login')
+  public async adminLogin(@Req() req: Request) {
     const user = req.user as Auth;
     return this.authService.generateJWT(user);
   }
