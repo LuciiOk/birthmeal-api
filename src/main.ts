@@ -8,11 +8,11 @@ async function bootstrap() {
   const options = new DocumentBuilder()
     .setTitle('Birthmeal API')
     .setDescription('The Birthmeal API description')
-    .setVersion('1.0')
+    .setVersion('2.0')
     .addTag('birthmeal')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
