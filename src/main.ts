@@ -12,7 +12,7 @@ async function bootstrap() {
     .addTag('birthmeal')
     .build();
   const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('api/documentation', app, document);
 
   const port = process.env.PORT || 3000;
   await app.listen(port);

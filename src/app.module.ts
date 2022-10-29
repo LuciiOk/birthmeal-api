@@ -12,9 +12,18 @@ import { BirthdaysModule } from './birthdays/birthdays.module';
 import config from './config';
 import { DatabaseModule } from './database/database.module';
 import { GoogleMapsModule } from './google-maps/google-maps.module';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
   imports: [
+    RouterModule.register([
+      { path: 'api', module: CompaniesModule },
+      { path: 'api', module: LocationsModule },
+      { path: 'api', module: AuthModule },
+      { path: 'api', module: BirthdaysModule },
+      { path: 'api', module: GoogleMapsModule },
+      { path: 'api', module: AuthModule },
+    ]),
     ConfigModule.forRoot({
       envFilePath: enviroments[process.env.NODE_ENV] || '.env',
       load: [config],
