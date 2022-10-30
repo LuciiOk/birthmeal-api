@@ -6,8 +6,11 @@ export class Category extends Document {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   icon: string;
+
+  @Prop({ required: false })
+  color: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
