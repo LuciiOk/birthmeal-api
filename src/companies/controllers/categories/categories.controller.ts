@@ -4,7 +4,6 @@ import {
   Body,
   Get,
   Param,
-  ParseIntPipe,
   Put,
   Delete,
   HttpCode,
@@ -26,7 +25,6 @@ import { CategoriesService } from 'src/companies/services/categories/categories.
 @Controller('categories')
 export class CategoriesController {
   constructor(private categoryService: CategoriesService) {}
-
 
   @Roles(Role.ADMIN)
   @Post()
