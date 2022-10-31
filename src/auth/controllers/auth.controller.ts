@@ -5,6 +5,9 @@ import {
   Req,
   UseInterceptors,
   UseGuards,
+  Headers,
+  Get,
+  HttpException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -63,5 +66,12 @@ export class AuthController {
   @Post('forgot-password')
   public async forgotPassword(@Body() email: ForgotPasswordDto) {
     // return this.authService.forgotPassword(email);
+  }
+
+  @Get('verify-token')
+  public async verifyToken(@Headers('authorization') token: string) {
+    if (!token) throw new HttpException('Token not found', 400);
+    const tokenString = token.split(' ')[1];
+    return this.authService.verifyToken(tokenString);
   }
 }

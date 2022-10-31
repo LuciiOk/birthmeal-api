@@ -90,6 +90,18 @@ export class AuthService {
     }
   }
 
+  async verifyToken(token: string): Promise<PayloadToken> {
+    try {
+      const payload = this.jwtService.verify(token);
+      if (!payload)
+        throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+      return payload;
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   async forgotPassword(email: string) {
     const user = await this.findOneByEmail(email);
     if (!user)
