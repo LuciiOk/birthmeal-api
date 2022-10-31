@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -11,37 +11,55 @@ export class CompaniesService {
   ) {}
 
   findAll() {
-    return this.companyModel.find().exec();
+    try {
+      return this.companyModel.find();
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
   }
 
   create(data: CompanyDto) {
-    const newCompany = new this.companyModel(data);
-    return newCompany.save();
+    try {
+      const newCompany = new this.companyModel(data);
+      return newCompany.save();
+    } catch (error) {
+      throw new HttpException("Can't create company", 500);
+    }
   }
 
   update(id: string, changes: UpdateCompanyDto) {
-    const company = this.companyModel
-      .findByIdAndUpdate(id, { $set: changes }, { new: true })
-      .exec();
-    if (!company) {
-      throw new NotFoundException(`Company #${id} not found`);
+    try {
+      return this.companyModel.findByIdAndUpdate(
+        id,
+        { $set: changes },
+        { new: true },
+      );
+    } catch (error) {
+      throw new HttpException("Can't update company", 500);
     }
-    return company;
   }
 
   remove(id: string) {
-    return this.companyModel.findByIdAndDelete(id);
+    try {
+      return this.companyModel.findByIdAndRemove(id);
+    } catch (error) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
   }
 
   async findOne(id: string): Promise<Company> {
-    const company = await this.companyModel.findById(id).exec();
-    if (!company) throw new NotFoundException(`Company #${id} not found`);
-    return company;
+    try {
+      return await this.companyModel.findById(id);
+    } catch (error) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
   }
 
   async findByCategory(id: string): Promise<Company[]> {
-    const company = await this.companyModel.find({ category: id }).exec();
-    if (!company) throw new NotFoundException(`Company #${id} not found`);
-    return company;
+    try {
+      return await this.companyModel.find({ category: id });
+    } catch (error) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
   }
 }
