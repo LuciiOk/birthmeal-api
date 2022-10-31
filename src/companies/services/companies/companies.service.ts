@@ -4,23 +4,31 @@ import { Model } from 'mongoose';
 
 import { Company } from 'src/companies/schemas/companies.schema';
 import { CompanyDto, UpdateCompanyDto } from 'src/companies/dtos/companies.dto';
+import { CategoriesService } from '../categories/categories.service';
 @Injectable()
 export class CompaniesService {
   constructor(
     @InjectModel(Company.name) private companyModel: Model<Company>,
+    private readonly categoryService: CategoriesService,
   ) {}
 
   findAll() {
     try {
-      return this.companyModel.find();
+      return this.companyModel.find().populate('category');
     } catch (error) {
       throw new HttpException(error, 500);
     }
   }
 
-  create(data: CompanyDto) {
+  async create(data: CompanyDto) {
     try {
       const newCompany = new this.companyModel(data);
+      const category = await this.categoryService.findOne(data.category);
+      if (!category) {
+        throw new NotFoundException(`Category #${data.category} not found`);
+      }
+      console.log(category);
+      newCompany.category = category;
       return newCompany.save();
     } catch (error) {
       throw new HttpException("Can't create company", 500);
@@ -29,11 +37,10 @@ export class CompaniesService {
 
   update(id: string, changes: UpdateCompanyDto) {
     try {
-      return this.companyModel.findByIdAndUpdate(
-        id,
-        { $set: changes },
-        { new: true },
-      );
+      const result = this.companyModel
+        .findByIdAndUpdate(id, { $set: changes }, { new: true })
+        .populate('category');
+      return result;
     } catch (error) {
       throw new HttpException("Can't update company", 500);
     }
