@@ -31,7 +31,6 @@ export class CompaniesService {
       }
       console.log(category);
       newCompany.category = category;
-      newCompany.categoryName = category.name;
 
       const locations = await this.locationService.createMany(
         data.locations,
