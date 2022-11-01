@@ -12,7 +12,7 @@ export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private authService: AuthService,
-    private CompanyService: CompaniesService,
+    private companyService: CompaniesService,
   ) {}
 
   async create(user: CreateUserDTO) {
@@ -49,10 +49,10 @@ export class UserService {
   async addCompanyToFavorites(_id: string, company: string): Promise<User> {
     const user = await this.userModel.findById(_id).exec();
     if (!user) throw new BadRequestException('User not found');
-    const companyExists = await this.CompanyService.findOne(company);
+    const companyExists = await this.companyService.findOne(company);
     if (!companyExists)
       throw new BadRequestException('Company not found, try again');
-    const index = user.favorites.indexOf(companyExists._id);
+    const index = user.favorites.indexOf(companyExists);
     if (index === -1) {
       user.favorites.push(companyExists);
       return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
@@ -75,12 +75,13 @@ export class UserService {
     return { total, totalPages, page, limit, data: paginatedFavorites };
   }
 
-  async getFavoriteCompany(_id: string, company: string): Promise<boolean> {
+  async getFavoriteCompany(_id: string, companyId: string): Promise<boolean> {
     const user = await this.userModel
       .findById(_id)
       .exec();
     if (!user) throw new BadRequestException('User not found');
+    const companyExists = await this.companyService.findOne(companyId);
     const favorites = user.favorites;
-    return favorites.some((favorite) => favorite._id == company);
+    return favorites.includes(companyExists);
   }
 }

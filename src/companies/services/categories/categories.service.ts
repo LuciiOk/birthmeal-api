@@ -65,8 +65,16 @@ export class CategoriesService {
     }
   }
 
-  remove(id: string) {
+  async remove(id: string) {
     try {
+      // validate if any company has this category
+      const companies = await this.companiesService.findByCategory(id);
+      if (companies.length > 0) {
+        throw new HttpException(
+          'No se puede eliminar la categoria porque hay establecimientos asociados',
+          400,
+        );
+      }
       return this.categoryModel.findByIdAndRemove(id);
     } catch (error) {
       throw new NotFoundException(`Category #${id} not found`);
@@ -80,8 +88,8 @@ export class CategoriesService {
           {
             $lookup: {
               from: 'companies',
-              localField: 'name',
-              foreignField: 'categoryName',
+              localField: '_id',
+              foreignField: 'category',
               as: 'c',
             },
           },
