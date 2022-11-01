@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Get, Param } from '@nestjs/common';
-import { GeoLocation, Location } from '../schemas/locations.schema';
+import { Location } from '../schemas/locations.schema';
 import { LocationsService } from '../services/locations.service';
 import { RegionService } from '../services/region.service';
 
@@ -14,13 +14,6 @@ export class LocationsController {
   async createLocation(@Body() location: Location): Promise<Location> {
     return this.locationsService.createLocation(location);
   }
-
-  // @Post('geo')
-  // async createGeoLocation(
-  //   @Body() geoLocation: GeoLocation,
-  // ): Promise<GeoLocation> {
-  //   return this.locationsService.createGeoLocation(geoLocation);
-  // }
 
   @Post('nearests/:companyId')
   async getNearestLocations(
