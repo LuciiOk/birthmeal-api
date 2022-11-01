@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { CompaniesModule } from 'src/companies/companies.module';
 import { GoogleMapsModule } from 'src/google-maps/google-maps.module';
 import { LocationsController } from './controllers/locations.controller';
 import {
@@ -32,5 +33,6 @@ import { RegionService } from './services/region.service';
   ],
   controllers: [LocationsController],
   providers: [LocationsService, RegionService],
+  exports: [LocationsService, RegionService],
 })
 export class LocationsModule {}

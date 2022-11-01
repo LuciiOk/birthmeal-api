@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsMongoId, IsNumber, IsPositive, IsString, IsUrl } from 'class-validator';
+import { IsMongoId, IsNumber, IsObject, IsPositive, IsString, IsUrl } from 'class-validator';
 export class CompanyDto {
   @IsString()
   @ApiProperty()
@@ -21,6 +21,10 @@ export class CompanyDto {
   @IsMongoId()
   @ApiProperty()
   readonly category: string;
+
+  @IsObject()
+  @ApiProperty()
+  locations: any[]
 }
 
 export class UpdateCompanyDto extends PartialType(CompanyDto) {}

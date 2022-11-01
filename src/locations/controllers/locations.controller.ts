@@ -27,7 +27,6 @@ export class LocationsController {
     @Param('companyId') companyId: string,
     @Body('coordinates') coordinates: [number, number],
   ): Promise<Location[]> {
-    console.log(companyId);
     return this.locationsService.getCompanyLocations(coordinates, companyId);
   }
 

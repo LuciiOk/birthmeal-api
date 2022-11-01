@@ -12,16 +12,13 @@ export class GoogleMapsService extends Client {
       const address = `${street}`;
       const { data } = await this.geocode({
         params: {
-          address: `${address}, ${commune}, Valparaiso, Chile`,
+          address: `${address}, ${commune}, Chile`,
           key: this.accessKey,
         },
       });
       const { results } = data;
       const { lat, lng } = results[0].geometry.location;
-      return {
-        coordinates: [lng, lat],
-        address: results[0].formatted_address,
-      };
+      return results
     } catch (error) {
       console.log(error);
       throw new HttpException('Error getting coordinates', 500);
@@ -39,27 +36,31 @@ export class GoogleMapsService extends Client {
         },
       });
       const { results } = data;
-      const places = results.map((place) => {
+      const places = results.map(async (place) => {
         const {
           geometry: geometryA,
           name,
           vicinity: address,
           place_id: _id,
-          
         } = place as PlaceData;
 
         const geometry = {
           coordinates: [geometryA.location.lng, geometryA.location.lat],
         };
 
+        const {commune} = await this.getStreet({
+          lat: geometryA.location.lat,
+          lng: geometryA.location.lng,
+        });
         return {
           geometry,
           name,
           address,
           _id,
+          commune
         };
       });
-      return places;
+      return Promise.all(places);
     } catch (error) {
       console.log(error);
       throw new HttpException('Error getting place', 500);
@@ -78,8 +79,8 @@ export class GoogleMapsService extends Client {
       const { results } = data;
       const { address_components } = results[0];
       const street = address_components[0].long_name;
-      const commune = address_components[1].long_name;
-      const region = address_components[2].long_name;
+      const commune = address_components[2].long_name;
+      const region = address_components[3].long_name;
       return {
         street,
         commune,

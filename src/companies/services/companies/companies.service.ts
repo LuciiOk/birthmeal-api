@@ -1,15 +1,17 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-
 import { Company } from 'src/companies/schemas/companies.schema';
 import { CompanyDto, UpdateCompanyDto } from 'src/companies/dtos/companies.dto';
 import { CategoriesService } from '../categories/categories.service';
+import { LocationsService } from 'src/locations/services/locations.service';
 @Injectable()
 export class CompaniesService {
   constructor(
     @InjectModel(Company.name) private companyModel: Model<Company>,
     private readonly categoryService: CategoriesService,
+    @Inject(forwardRef(() => LocationsService))
+    private readonly locationService: LocationsService,
   ) {}
 
   findAll() {
@@ -30,7 +32,17 @@ export class CompaniesService {
       console.log(category);
       newCompany.category = category;
       newCompany.categoryName = category.name;
-      return newCompany.save();
+
+      const locations = await this.locationService.createMany(
+        data.locations,
+        newCompany,
+      );
+      
+      const company = await newCompany.save();
+      return {
+        ...company.toObject(),
+        locations,
+      }
     } catch (error) {
       throw new HttpException("Can't create company", 500);
     }

@@ -6,6 +6,7 @@ import { CategoriesService } from './services/categories/categories.service';
 import { CompaniesService } from './services/companies/companies.service';
 import { Company, CompanySchema } from './schemas/companies.schema';
 import { Category, CategorySchema } from './schemas/categories.schema';
+import { LocationsModule } from 'src/locations/locations.module';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -18,6 +19,7 @@ import { Category, CategorySchema } from './schemas/categories.schema';
         schema: CategorySchema,
       },
     ]),
+    LocationsModule
   ],
   controllers: [CategoriesController, CompaniesController],
   providers: [CategoriesService, CompaniesService],
