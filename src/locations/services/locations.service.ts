@@ -62,20 +62,8 @@ export class LocationsService {
     coordinates: [number, number],
     companyId: string,
   ): Promise<Location> {
-    const location = await this.locationModel.findOne({
-      $and: [
-        { company: companyId },
-        {
-          geometry: {
-            $near: {
-              $geometry: { type: 'Point', coordinates },
-              $maxDistance: 50000, // 50km
-            },
-          },
-        },
-      ],
-    });
-    return location;
+    const locations = await this.getCompanyLocations(coordinates, companyId);
+    return locations[0];
   }
 
   // get nearest locations by coordinates and company id at radius 1km
