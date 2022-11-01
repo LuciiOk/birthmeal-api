@@ -1,16 +1,27 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Db } from 'mongodb';
 import { Model } from 'mongoose';
 import {
   CategoryDto,
   UpdateCategoryDto,
 } from 'src/companies/dtos/categories.dto';
 import { Category } from 'src/companies/schemas/categories.schema';
+import { CompaniesService } from '../companies/companies.service';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @Inject('MONGO') private readonly mongo: Db,
+    @Inject(forwardRef(() => CompaniesService))
+    private readonly companiesService: CompaniesService,
   ) {}
 
   findAll() {
@@ -59,6 +70,27 @@ export class CategoriesService {
       return this.categoryModel.findByIdAndRemove(id);
     } catch (error) {
       throw new NotFoundException(`Category #${id} not found`);
+    }
+  }
+
+  public async getCategoriesWithCompanies() {
+    try {
+      const categories = await this.categoryModel
+        .aggregate([
+          {
+            $lookup: {
+              from: 'companies',
+              localField: 'name',
+              foreignField: 'categoryName',
+              as: 'c',
+            },
+          },
+          { $match: { c: { $ne: [] } } },
+        ])
+        .exec();
+      return categories;
+    } catch (error) {
+      throw new HttpException(error, 500);
     }
   }
 }

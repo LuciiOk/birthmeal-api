@@ -19,6 +19,9 @@ export class Company extends Document {
 
   @Prop({ required: true, type: Types.ObjectId, ref: Category.name })
   category: Category;
+
+  @Prop({ required: true })
+  categoryName: string;
 }
 
 export const CompanySchema = SchemaFactory.createForClass(Company);

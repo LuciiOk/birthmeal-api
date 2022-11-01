@@ -14,16 +14,26 @@ import { CompaniesService } from 'src/companies/services/companies/companies.ser
 
 import { Public } from 'src/auth/decorators/public.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/guards/role.guard';
+import { Roles } from 'src/auth/decorators/role.decorator';
+import { Role } from 'src/auth/schemas/auth.schema';
 
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('companies')
 export class CompaniesController {
   constructor(private companyService: CompaniesService) {}
 
-  @Public()
   @Post()
+  @Public()
+  @Roles(Role.ADMIN)
   create(@Body() user: CompanyDto) {
     return this.companyService.create(user);
+  }
+
+  @Get('category/:id')
+  @Roles(Role.ADMIN)
+  findByCategory(@Param('id') id: string) {
+    return this.companyService.findByCategory(id);
   }
 
   @Put(':id')
@@ -31,20 +41,16 @@ export class CompaniesController {
     return this.companyService.update(id, user);
   }
 
+
   @Delete(':id')
+  @Roles(Role.ADMIN)
   delete(@Param('id') id: string) {
     return this.companyService.remove(id);
   }
 
+  @Get()
   @Public()
-  @Get('')
   findAll() {
     return this.companyService.findAll();
-  }
-
-  @Public()
-  @Get('category/:id')
-  findByCategory(@Param('id') id: string) {
-    return this.companyService.findByCategory(id);
   }
 }

@@ -26,32 +26,40 @@ import { CategoriesService } from 'src/companies/services/categories/categories.
 export class CategoriesController {
   constructor(private categoryService: CategoriesService) {}
 
-  @Roles(Role.ADMIN)
   @Post()
+  @Roles(Role.ADMIN)
   create(@Body() user: CategoryDto) {
     return this.categoryService.create(user);
   }
 
-  @Roles(Role.ADMIN)
   @Put(':id')
+  @Roles(Role.ADMIN)
   update(@Param('id') id: string, @Body() user: UpdateCategoryDto) {
     return this.categoryService.update(id, user);
   }
 
-  @Roles(Role.ADMIN)
   @Delete(':id')
+  @Roles(Role.ADMIN)
+  @HttpCode(HttpStatus.OK)
   delete(@Param('id') id: string) {
     return this.categoryService.remove(id);
   }
 
+  @Public()
+  @Get('companies')
+  @HttpCode(HttpStatus.ACCEPTED)
+  getCategoriesWithCompanies() {
+    return this.categoryService.getCategoriesWithCompanies();
+  }
+
+  @Get()
   @Roles(Role.ADMIN)
-  @Get('')
   findAll() {
     return this.categoryService.findAll();
   }
 
-  @Public()
   @Get(':id')
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.ACCEPTED)
   findOne(@Param('id') id: string) {
     return this.categoryService.findOne(id);

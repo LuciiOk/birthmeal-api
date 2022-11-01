@@ -29,6 +29,7 @@ export class CompaniesService {
       }
       console.log(category);
       newCompany.category = category;
+      newCompany.categoryName = category.name;
       return newCompany.save();
     } catch (error) {
       throw new HttpException("Can't create company", 500);

@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/role.decorator';
 import { Role } from '../schemas/auth.schema';
+import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -16,6 +17,15 @@ export class RolesGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+    const isPublic = this.reflector.get<boolean>(
+      IS_PUBLIC_KEY,
+      context.getHandler(),
+    );
+    console.log('isPublic', isPublic);
+    if (isPublic) {
+      return true;
+    }
+
     const roles = this.reflector.get<Role[]>(ROLES_KEY, context.getHandler());
     if (!roles) {
       return true;
