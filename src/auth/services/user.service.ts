@@ -87,6 +87,6 @@ export class UserService {
     if (!user) throw new BadRequestException('User not found');
     const companyExists = await this.companyService.findOne(companyId);
     const favorites = user.favorites;
-    return favorites.includes(companyExists);
+    return favorites.includes(companyExists._id);
   }
 }
