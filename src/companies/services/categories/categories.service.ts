@@ -66,18 +66,17 @@ export class CategoriesService {
   }
 
   async remove(id: string) {
+    const companies = await this.companiesService.findByCategory(id);
+    if (companies.length > 0) {
+      throw new HttpException(
+        'No se puede eliminar la categoria porque hay establecimientos asociados',
+        400,
+      );
+    }
     try {
-      // validate if any company has this category
-      const companies = await this.companiesService.findByCategory(id);
-      if (companies.length > 0) {
-        throw new HttpException(
-          'No se puede eliminar la categoria porque hay establecimientos asociados',
-          400,
-        );
-      }
-      return this.categoryModel.findByIdAndRemove(id);
+      return this.categoryModel.findByIdAndDelete(id);
     } catch (error) {
-      throw new NotFoundException(`Category #${id} not found`);
+      throw new HttpException("Can't delete category", 500);
     }
   }
 

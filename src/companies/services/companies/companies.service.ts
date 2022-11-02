@@ -29,7 +29,6 @@ export class CompaniesService {
       if (!category) {
         throw new NotFoundException(`Category #${data.category} not found`);
       }
-      console.log(category);
       newCompany.category = category;
 
       const locations = await this.locationService.createMany(

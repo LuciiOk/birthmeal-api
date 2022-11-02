@@ -46,19 +46,26 @@ export class UserService {
     return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
   }
 
-  async addCompanyToFavorites(_id: string, company: string): Promise<User> {
-    const user = await this.userModel.findById(_id).exec();
-    if (!user) throw new BadRequestException('User not found');
+  async addCompanyToFavorites(_id: string, company: string): Promise<any> {
     const companyExists = await this.companyService.findOne(company);
     if (!companyExists)
       throw new BadRequestException('Company not found, try again');
-    const index = user.favorites.indexOf(companyExists);
-    if (index === -1) {
-      user.favorites.push(companyExists);
-      return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
+
+    const user = await this.userModel.findById(_id).exec();
+    if (!user) throw new BadRequestException('User not found');
+
+    const favorites = user.favorites;
+    if (favorites.includes(companyExists._id)) {
+      const index = favorites.indexOf(companyExists._id);
+      favorites.splice(index, 1);
+      return this.userModel
+        .findByIdAndUpdate(_id, { favorites }, { new: true })
+        .exec();
     }
-    user.favorites.splice(index, 1);
-    return this.userModel.findByIdAndUpdate(_id, user, { new: true }).exec();
+    favorites.push(companyExists._id);
+    return this.userModel
+      .findByIdAndUpdate(_id, { favorites }, { new: true })
+      .exec();
   }
 
   async getFavoriteCompanies(_id: string, page, limit): Promise<any> {
@@ -76,9 +83,7 @@ export class UserService {
   }
 
   async getFavoriteCompany(_id: string, companyId: string): Promise<boolean> {
-    const user = await this.userModel
-      .findById(_id)
-      .exec();
+    const user = await this.userModel.findById(_id).exec();
     if (!user) throw new BadRequestException('User not found');
     const companyExists = await this.companyService.findOne(companyId);
     const favorites = user.favorites;
