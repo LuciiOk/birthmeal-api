@@ -1,5 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsPositive, IsString } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class BirthdateDto {
   @ApiProperty()
@@ -17,6 +17,7 @@ export class BirthdateDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   notificationId: string;
 }
 

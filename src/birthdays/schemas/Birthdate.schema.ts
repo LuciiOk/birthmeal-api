@@ -17,7 +17,7 @@ export class Birthdate extends Document {
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: User.name })
   user: User;
 
-  @Prop({ required: true })
+  @Prop({ default: null })
   notificationId: string;
 }
 
