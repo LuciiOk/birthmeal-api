@@ -14,6 +14,10 @@ export class BirthdateDto {
   @ApiProperty()
   @IsBoolean()
   remind: boolean;
+
+  @ApiProperty()
+  @IsString()
+  notificationId: string;
 }
 
 export class UpdateBirthdateDto extends PartialType(BirthdateDto) {}

@@ -16,6 +16,9 @@ export class Birthdate extends Document {
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: User.name })
   user: User;
+
+  @Prop({ required: true })
+  notificationId: string;
 }
 
 export const BirthdateSchema = SchemaFactory.createForClass(Birthdate);

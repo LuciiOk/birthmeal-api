@@ -1,4 +1,10 @@
-import { forwardRef, HttpException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  HttpException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Company } from 'src/companies/schemas/companies.schema';
@@ -35,12 +41,12 @@ export class CompaniesService {
         data.locations,
         newCompany,
       );
-      
+
       const company = await newCompany.save();
       return {
         ...company.toObject(),
         locations,
-      }
+      };
     } catch (error) {
       throw new HttpException("Can't create company", 500);
     }
@@ -49,7 +55,13 @@ export class CompaniesService {
   update(id: string, changes: UpdateCompanyDto) {
     try {
       const result = this.companyModel
-        .findByIdAndUpdate(id, { $set: changes }, { new: true })
+        .findByIdAndUpdate(
+          id,
+          {
+            $set: changes,
+          },
+          { new: true },
+        )
         .populate('category');
       return result;
     } catch (error) {
