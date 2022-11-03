@@ -8,6 +8,7 @@ import {
   Put,
   Delete,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { CompanyDto, UpdateCompanyDto } from 'src/companies/dtos/companies.dto';
 import { CompaniesService } from 'src/companies/services/companies/companies.service';
@@ -50,7 +51,7 @@ export class CompaniesController {
 
   @Get()
   @Public()
-  findAll() {
-    return this.companyService.findAll();
+  findAll(@Query('categories') categories: string[]) {
+    return this.companyService.findAll(categories);
   }
 }

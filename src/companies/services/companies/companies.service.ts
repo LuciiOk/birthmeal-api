@@ -20,9 +20,33 @@ export class CompaniesService {
     private readonly locationService: LocationsService,
   ) {}
 
-  findAll() {
+  findAll(categoriesName?: string[]) {
     try {
-      return this.companyModel.find().populate('category');
+      if (categoriesName) {
+        const $in = Array.isArray(categoriesName)
+          ? categoriesName
+          : [categoriesName];
+        console.log($in);
+        return this.companyModel.aggregate([
+          {
+            $lookup: {
+              from: 'categories',
+              localField: 'category',
+              foreignField: '_id',
+              as: 'categories',
+            },
+          },
+          {
+            $unwind: '$categories',
+          },
+          {
+            $match: {
+              'categories.name': { $in },
+            },
+          },
+        ]);
+      }
+      return this.companyModel.find();
     } catch (error) {
       throw new HttpException(error, 500);
     }
