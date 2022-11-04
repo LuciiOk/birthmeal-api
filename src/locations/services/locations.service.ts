@@ -88,6 +88,9 @@ export class LocationsService {
       ],
     });
     // sort locations by distance
+    if (!coordinates) {
+      return locations;
+    }
     locations.sort((a, b) => {
       const distanceA = this.getDistanceFromLatLonInKm(
         coordinates[0],
