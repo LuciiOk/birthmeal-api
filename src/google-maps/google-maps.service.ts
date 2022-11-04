@@ -17,7 +17,6 @@ export class GoogleMapsService extends Client {
         },
       });
       const { results } = data;
-      const { lat, lng } = results[0].geometry.location;
       return results
     } catch (error) {
       console.log(error);
@@ -41,7 +40,7 @@ export class GoogleMapsService extends Client {
           geometry: geometryA,
           name,
           vicinity: address,
-          place_id: _id,
+          place_id,
         } = place as PlaceData;
 
         const geometry = {
@@ -56,7 +55,7 @@ export class GoogleMapsService extends Client {
           geometry,
           name,
           address,
-          _id,
+          place_id,
           commune
         };
       });

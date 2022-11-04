@@ -1,6 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { Company } from 'src/companies/schemas/companies.schema';
 import { GoogleMapsService } from 'src/google-maps/google-maps.service';
 import { GeoLocation, Location } from '../schemas/locations.schema';
@@ -34,9 +34,6 @@ export class LocationsService {
     try {
 
       const locationsWithCompany = locations.map((location) => {
-
-        const splittedAddress = location.address.split(',');
-
         location.company = company;
         return location;
       });
@@ -58,16 +55,20 @@ export class LocationsService {
     return this.geoLocationModel.find().exec();
   }
 
+  async getLocationsByCompany(companyId: string): Promise<Location[]> {
+    return this.locationModel.find({ company: companyId });
+  }
+
   async getNearestGeoLocation(
     coordinates: [number, number],
     companyId: string,
   ): Promise<Location> {
-    const locations = await this.getCompanyLocations(coordinates, companyId);
+    const locations = await this.getCompanyLocationsCoords(coordinates, companyId);
     return locations[0];
   }
 
   // get nearest locations by coordinates and company id at radius 1km
-  async getCompanyLocations(
+  async getCompanyLocationsCoords(
     coordinates: [number, number],
     companyId: string,
   ): Promise<Location[]> {

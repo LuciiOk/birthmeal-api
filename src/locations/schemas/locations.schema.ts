@@ -13,6 +13,9 @@ export class GeoLocation extends Document {
 
 @Schema()
 export class Location extends Document {
+  @Prop({ required: true, unique: true })
+  place_id: string;
+
   @Prop({ required: true })
   name: string;
 

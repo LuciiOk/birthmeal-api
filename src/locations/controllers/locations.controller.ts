@@ -20,7 +20,7 @@ export class LocationsController {
     @Param('companyId') companyId: string,
     @Body('coordinates') coordinates: [number, number],
   ): Promise<Location[]> {
-    return this.locationsService.getCompanyLocations(coordinates, companyId);
+    return this.locationsService.getCompanyLocationsCoords(coordinates, companyId);
   }
 
   @Post('nearest/:companyId')
@@ -29,6 +29,11 @@ export class LocationsController {
     @Param('companyId') companyId: string,
   ): Promise<Location> {
     return this.locationsService.getNearestGeoLocation(coordinates, companyId);
+  }
+
+  @Get(':companyId')
+  async getCompanyLocations(@Param('companyId') companyId: string) {
+    return this.locationsService.getLocationsByCompany(companyId);
   }
 
   @Get()

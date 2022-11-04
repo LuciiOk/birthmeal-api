@@ -1,5 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsMongoId, IsNumber, IsObject, IsPositive, IsString, IsUrl } from 'class-validator';
+import { LocationDto } from 'src/locations/dtos/locations.dto';
 export class CompanyDto {
   @IsString()
   @ApiProperty()

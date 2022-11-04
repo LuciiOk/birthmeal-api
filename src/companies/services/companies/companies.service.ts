@@ -26,7 +26,6 @@ export class CompaniesService {
         const $in = Array.isArray(categoriesName)
           ? categoriesName
           : [categoriesName];
-        console.log($in);
         return this.companyModel.aggregate([
           {
             $lookup: {
@@ -46,7 +45,7 @@ export class CompaniesService {
           },
         ]);
       }
-      return this.companyModel.find();
+      return this.companyModel.find().populate('category');
     } catch (error) {
       throw new HttpException(error, 500);
     }
