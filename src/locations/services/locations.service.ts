@@ -72,6 +72,10 @@ export class LocationsService {
     coordinates: [number, number],
     companyId: string,
   ): Promise<Location[]> {
+    if (!coordinates) {
+      return this.getLocationsByCompany(companyId);
+    }
+
     const locations = await this.locationModel.find({
       $and: [
         { company: companyId },
@@ -88,9 +92,6 @@ export class LocationsService {
       ],
     });
     // sort locations by distance
-    if (!coordinates) {
-      return locations;
-    }
     locations.sort((a, b) => {
       const distanceA = this.getDistanceFromLatLonInKm(
         coordinates[0],

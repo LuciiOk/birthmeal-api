@@ -13,6 +13,7 @@ import config from './config';
 import { DatabaseModule } from './database/database.module';
 import { GoogleMapsModule } from './google-maps/google-maps.module';
 import { RouterModule } from '@nestjs/core';
+import { ImgurModule } from './imgur/imgur.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { RouterModule } from '@nestjs/core';
     LocationsModule,
     BirthdaysModule,
     GoogleMapsModule,
+    ImgurModule,
   ],
   controllers: [AppController, CompaniesController],
   providers: [],
