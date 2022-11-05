@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { ImgurClient } from 'imgur';
 import { createReadStream } from 'fs';
@@ -13,14 +13,19 @@ export class ImgurService {
   constructor() {}
 
   async uploadImage(imageData: Buffer) {
-    const imageBuffer = imageData;
+    try {
+      const imageBuffer = imageData;
 
-    const {
-      data: { link },
-    } = await this.imgurClient.upload({
-      image: imageBuffer,
-      title: 'test',
-    });
-    return link;
+      const {
+        data: { link },
+      } = await this.imgurClient.upload({
+        image: imageBuffer,
+        title: 'test',
+      });
+
+      return link;
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
   }
 }

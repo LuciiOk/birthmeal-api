@@ -24,6 +24,7 @@ import { ImgurModule } from './imgur/imgur.module';
       { path: 'api', module: BirthdaysModule },
       { path: 'api', module: GoogleMapsModule },
       { path: 'api', module: AuthModule },
+      { path: 'api', module: ImgurModule },
     ]),
     ConfigModule.forRoot({
       envFilePath: enviroments[process.env.NODE_ENV] || '.env',

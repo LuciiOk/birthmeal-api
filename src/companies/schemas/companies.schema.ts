@@ -18,6 +18,9 @@ export class Company extends Document {
   @Prop({ required: true })
   webUrl: string;
 
+  @Prop({ required: true })
+  imageUrl: string;
+
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: Category.name })
   category: Category;
 }

@@ -12,8 +12,8 @@ export class ImgurController {
   @Post() 
   @UseInterceptors(FileInterceptor('file'))
   async uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const image = await this.imgurService.uploadImage(file.buffer);
-    return image;
+    const imageUrl = await this.imgurService.uploadImage(file.buffer);
+    return imageUrl;
   }
 
   // @Get()

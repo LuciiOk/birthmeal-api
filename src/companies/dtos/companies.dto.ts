@@ -14,6 +14,10 @@ export class CompanyDto {
   @ApiProperty()
   readonly webUrl: string;
 
+  @IsUrl()
+  @ApiProperty()
+  readonly imageUrl: string;
+
   @IsNumber()
   @IsPositive()
   @ApiProperty()
