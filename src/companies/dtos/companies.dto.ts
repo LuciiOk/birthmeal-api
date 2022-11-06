@@ -1,6 +1,13 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsMongoId, IsNumber, IsObject, IsPositive, IsString, IsUrl } from 'class-validator';
-import { LocationDto } from 'src/locations/dtos/locations.dto';
+import {
+  IsArray,
+  IsMongoId,
+  IsNumber,
+  IsObject,
+  IsPositive,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 export class CompanyDto {
   @IsString()
   @ApiProperty()
@@ -9,6 +16,10 @@ export class CompanyDto {
   @IsString()
   @ApiProperty()
   readonly description: string;
+
+  @IsArray()
+  @ApiProperty()
+  readonly benefits: string[];
 
   @IsUrl()
   @ApiProperty()
@@ -29,7 +40,7 @@ export class CompanyDto {
 
   @IsObject()
   @ApiProperty()
-  locations: any[]
+  locations: any[];
 }
 
 export class UpdateCompanyDto extends PartialType(CompanyDto) {}

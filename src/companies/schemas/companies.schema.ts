@@ -12,6 +12,9 @@ export class Company extends Document {
   @Prop({ required: true })
   description: string;
 
+  @Prop({ required: true })
+  benefits: string[];
+
   @Prop({ type: Number })
   rating: number;
 
