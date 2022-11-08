@@ -7,6 +7,7 @@ import {
   Param,
   UseGuards,
   Req,
+  Put,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Roles } from 'src/auth/decorators/role.decorator';
@@ -34,6 +35,12 @@ export class BirthdaysController {
   @Delete(':id')
   delete(@Param('id') id: string) {
     return this.birthdaysService.delete(id);
+  }
+
+  @Roles(Role.USER)
+  @Put(':id')
+  update(@Param('id') id: string, @Body() birthdate: BirthdateDto) {
+    return this.birthdaysService.update(id, birthdate);
   }
 
   @Roles(Role.USER)

@@ -37,6 +37,14 @@ export class BirthdaysService {
     return this.birthdateModel.findByIdAndDelete(id).exec();
   }
 
+  async update(id: string, birthdate: BirthdateDto): Promise<Birthdate> {
+    return this.birthdateModel
+      .findByIdAndUpdate(id, birthdate, {
+        new: true,
+      })
+      .exec();
+  }
+
   async findByUser(user: Schema.Types.ObjectId): Promise<Birthdate[]> {
     return this.birthdateModel.find({ user }).exec();
   }
