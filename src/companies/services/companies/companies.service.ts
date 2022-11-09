@@ -20,32 +20,46 @@ export class CompaniesService {
     private readonly locationService: LocationsService,
   ) {}
 
-  findAll(categoriesName?: string[]) {
+  async findAll(categoriesName?: string[]) {
     try {
       if (categoriesName) {
         const $in = Array.isArray(categoriesName)
           ? categoriesName
           : [categoriesName];
-        return this.companyModel.aggregate([
-          {
-            $lookup: {
-              from: 'categories',
-              localField: 'category',
-              foreignField: '_id',
-              as: 'categories',
+        const result = await this.companyModel
+          .aggregate([
+            {
+              $lookup: {
+                from: 'categories',
+                localField: 'category',
+                foreignField: '_id',
+                as: 'categories',
+              },
             },
-          },
-          {
-            $unwind: '$categories',
-          },
-          {
-            $match: {
-              'categories.name': { $in },
+            {
+              $unwind: '$categories',
             },
-          },
-        ]);
+            {
+              $match: {
+                'categories.name': { $in },
+              },
+            },
+          ])
+          .exec();
+        return result.map((company) => {
+          return {
+            ...company,
+            rating: this.calculateRating(company._id),
+          };
+        });
       }
-      return this.companyModel.find().populate('category');
+      const result = await this.companyModel.find().populate('category');
+      return result.map((company) => {
+        return {
+          ...company.toObject(),
+          rating: this.calculateRating(company._id),
+        };
+      });
     } catch (error) {
       throw new HttpException(error, 500);
     }
