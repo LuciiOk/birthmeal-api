@@ -46,20 +46,16 @@ export class CompaniesService {
             },
           ])
           .exec();
-        return result.map((company) => {
-          return {
-            ...company,
-            rating: this.calculateRating(company._id),
-          };
+        return result.map((item) => {
+          item.rating = this.calculateRating(item.rating) || 0;
+          return item;
         });
       }
       const result = await this.companyModel.find().populate('category');
-      return result.map((company) => {
-        return {
-          ...company.toObject(),
-          rating: this.calculateRating(company._id),
-        };
-      });
+      return result.map((item) => ({
+        ...item.toObject(),
+        rating: this.calculateRating(item.rating) || 0,
+      }));
     } catch (error) {
       throw new HttpException(error, 500);
     }
@@ -153,7 +149,7 @@ export class CompaniesService {
         },
         { new: true },
       );
-      return this.calculateRating(id);
+      return this.calculateRating(result.rating);
     } catch (error) {
       throw new NotFoundException(`Company #${id} not found`);
     }
@@ -161,13 +157,8 @@ export class CompaniesService {
 
   // [5, 0, 3, 0, 0] = 5 * 5 + 0 * 4 + 3 * 3 + 0 * 2 + 0 * 1 = 20 / 8 = 2.5
   // puntaje total / cantidad de votos
-  private async calculateRating(id: string) {
+  private calculateRating(rating: number[]) {
     try {
-      const company = await this.findOne(id);
-      if (!company) {
-        throw new NotFoundException(`Company #${id} not found`);
-      }
-      const rating = company.rating;
       let totalScore = 0;
 
       for (let i = 0; i < rating.length; i++) {
@@ -178,7 +169,7 @@ export class CompaniesService {
 
       return totalScore / totalVotes;
     } catch (error) {
-      throw new NotFoundException(`Company #${id} not found`);
+      throw new HttpException(error, 500);
     }
   }
 }
