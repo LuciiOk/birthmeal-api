@@ -15,8 +15,8 @@ export class Company extends Document {
   @Prop({ required: true })
   benefits: string[];
 
-  @Prop({ type: Number })
-  rating: number;
+  @Prop({ required: false, default: [0, 0, 0, 0, 0], type: [Number] })
+  rating: number[];
 
   @Prop({ required: true })
   webUrl: string;
@@ -24,7 +24,11 @@ export class Company extends Document {
   @Prop({ required: true })
   imageUrl: string;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: Category.name })
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Category.name,
+  })
   category: Category;
 }
 

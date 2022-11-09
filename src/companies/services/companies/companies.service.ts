@@ -115,4 +115,56 @@ export class CompaniesService {
       throw new NotFoundException(`Company #${id} not found`);
     }
   }
+
+  async addValoration(id: string, indexValoration: number) {
+    try {
+      if (
+        indexValoration < 0 ||
+        indexValoration > 4 ||
+        !Number.isInteger(indexValoration)
+      ) {
+        throw new HttpException('Index valoration is not valid', 400);
+      }
+      const company = await this.findOne(id);
+      if (!company) {
+        throw new NotFoundException(`Company #${id} not found`);
+      }
+
+      const rating = company.rating;
+      rating[indexValoration] = rating[indexValoration] + 1;
+      const result = await this.companyModel.findByIdAndUpdate(
+        id,
+        {
+          $set: { rating },
+        },
+        { new: true },
+      );
+      return this.calculateRating(id);
+    } catch (error) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
+  }
+
+  // [5, 0, 3, 0, 0] = 5 * 5 + 0 * 4 + 3 * 3 + 0 * 2 + 0 * 1 = 20 / 8 = 2.5
+  // puntaje total / cantidad de votos
+  private async calculateRating(id: string) {
+    try {
+      const company = await this.findOne(id);
+      if (!company) {
+        throw new NotFoundException(`Company #${id} not found`);
+      }
+      const rating = company.rating;
+      let totalScore = 0;
+
+      for (let i = 0; i < rating.length; i++) {
+        totalScore += rating[i] * (i + 1);
+      }
+
+      const totalVotes = rating.reduce((a, b) => a + b, 0);
+
+      return totalScore / totalVotes;
+    } catch (error) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
+  }
 }

@@ -4,7 +4,6 @@ import {
   Body,
   Get,
   Param,
-  ParseIntPipe,
   Put,
   Delete,
   UseGuards,
@@ -31,6 +30,15 @@ export class CompaniesController {
     return this.companyService.create(user);
   }
 
+  @Post('rating/:id')
+  @Public()
+  addValoration(
+    @Param('id') id: string,
+    @Body('valoration') valoration: number,
+  ) {
+    return this.companyService.addValoration(id, valoration);
+  }
+
   @Get('category/:id')
   @Roles(Role.ADMIN)
   findByCategory(@Param('id') id: string) {
@@ -41,7 +49,6 @@ export class CompaniesController {
   update(@Param('id') id: string, @Body() user: UpdateCompanyDto) {
     return this.companyService.update(id, user);
   }
-
 
   @Delete(':id')
   @Roles(Role.ADMIN)
