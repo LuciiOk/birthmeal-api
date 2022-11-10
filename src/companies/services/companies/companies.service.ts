@@ -26,30 +26,28 @@ export class CompaniesService {
         const $in = Array.isArray(categoriesName)
           ? categoriesName
           : [categoriesName];
-        const result = await this.companyModel
-          .aggregate([
-            {
-              $lookup: {
-                from: 'categories',
-                localField: 'category',
-                foreignField: '_id',
-                as: 'categories',
-              },
+        const result = await this.companyModel.aggregate([
+          {
+            $lookup: {
+              from: 'categories',
+              localField: 'category',
+              foreignField: '_id',
+              as: 'categories',
             },
-            {
-              $unwind: '$categories',
+          },
+          {
+            $unwind: '$categories',
+          },
+          {
+            $match: {
+              'categories.name': { $in },
             },
-            {
-              $match: {
-                'categories.name': { $in },
-              },
-            },
-          ])
-          .exec();
-        return result.map((item) => {
-          item.rating = this.calculateRating(item.rating) || 0;
-          return item;
-        });
+          },
+        ]);
+        return result.map((item) => ({
+          ...item,
+          rating: this.calculateRating(item.rating),
+        }));
       }
       const result = await this.companyModel.find().populate('category');
       return result.map((item) => ({
@@ -171,8 +169,10 @@ export class CompaniesService {
   // puntaje total / cantidad de votos
   private calculateRating(rating: number[]) {
     try {
+      if (!rating) {
+        return 0;
+      }
       let totalScore = 0;
-
       for (let i = 0; i < rating.length; i++) {
         totalScore += rating[i] * (i + 1);
       }
