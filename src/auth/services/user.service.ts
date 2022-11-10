@@ -37,7 +37,11 @@ export class UserService {
       access_token,
       user: {
         ...result,
-        user: newUser.toObject(),
+        _id: auth._id.toString(),
+        user: {
+          ...newUser.toObject(),
+          _id: newUser._id.toString(),
+        },
       },
     };
   }
