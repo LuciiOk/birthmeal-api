@@ -29,7 +29,10 @@ export class UserService {
       user: newUser._id,
     });
     const token = await this.authService.generateJWT(auth);
-    return token;
+    return {
+      access_token: token,
+      user: auth,
+    };
   }
 
   async findOne(_id: string): Promise<User> {
