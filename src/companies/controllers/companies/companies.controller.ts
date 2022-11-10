@@ -63,7 +63,7 @@ export class CompaniesController {
   }
 
   @Get(':id')
-  @Public()
+  @Roles(Role.USER)
   findOne(@Param('id') id: string) {
     return this.companyService.findOne2(id);
   }
