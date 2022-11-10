@@ -61,4 +61,10 @@ export class CompaniesController {
   findAll(@Query('categories') categories: string[]) {
     return this.companyService.findAll(categories);
   }
+
+  @Get(':id')
+  @Public()
+  findOne(@Param('id') id: string) {
+    return this.companyService.findOne(id);
+  }
 }

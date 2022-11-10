@@ -110,9 +110,13 @@ export class CompaniesService {
     }
   }
 
-  async findOne(id: string): Promise<Company> {
+  async findOne(id: string) {
     try {
-      return await this.companyModel.findById(id);
+      const result = await this.companyModel.findById(id).populate('category');
+      return {
+        ...result.toObject(),
+        rating: this.calculateRating(result.rating) || 0,
+      };
     } catch (error) {
       throw new NotFoundException(`Company #${id} not found`);
     }
