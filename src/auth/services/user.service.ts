@@ -28,14 +28,16 @@ export class UserService {
       confirmPassword: user.userAuth.confirmPassword,
       user: newUser._id,
     });
-    const { access_token, user: userData } = await this.authService.generateJWT(
-      auth,
-    );
+
+    const { access_token } = await this.authService.generateJWT(auth);
+
+    const { password, ...result } = auth.toObject();
+
     return {
       access_token,
       user: {
-        ...userData,
-        user: newUser,
+        ...result,
+        user: newUser.toObject(),
       },
     };
   }
