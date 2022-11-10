@@ -65,6 +65,6 @@ export class CompaniesController {
   @Get(':id')
   @Public()
   findOne(@Param('id') id: string) {
-    return this.companyService.findOne(id);
+    return this.companyService.findOne2(id);
   }
 }

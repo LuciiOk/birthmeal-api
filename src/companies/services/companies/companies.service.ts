@@ -112,6 +112,14 @@ export class CompaniesService {
 
   async findOne(id: string) {
     try {
+      return await this.companyModel.findById(id);
+    } catch (error) {
+      throw new NotFoundException(`Company #${id} not found`);
+    }
+  }
+
+  async findOne2(id: string) {
+    try {
       const result = await this.companyModel.findById(id).populate('category');
       return {
         ...result.toObject(),
