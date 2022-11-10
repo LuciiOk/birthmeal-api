@@ -31,7 +31,7 @@ export class CompaniesController {
   }
 
   @Post('rating/:id')
-  @Public()
+  @Roles(Role.USER)
   addValoration(
     @Param('id') id: string,
     @Body('valoration') valoration: number,
@@ -63,7 +63,7 @@ export class CompaniesController {
   }
 
   @Get(':id')
-  @Roles(Role.USER)
+  @Public()
   findOne(@Param('id') id: string) {
     return this.companyService.findOne2(id);
   }
