@@ -30,6 +30,6 @@ import { ValorationController } from './controllers/valoration/valoration.contro
   ],
   controllers: [CategoriesController, CompaniesController, ValorationController],
   providers: [CategoriesService, CompaniesService, ValorationService],
-  exports: [CompaniesService, CategoriesService],
+  exports: [CompaniesService, CategoriesService, ValorationService],
 })
 export class CompaniesModule {}

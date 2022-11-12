@@ -11,6 +11,7 @@ import { Company } from 'src/companies/schemas/companies.schema';
 import { CompanyDto, UpdateCompanyDto } from 'src/companies/dtos/companies.dto';
 import { CategoriesService } from '../categories/categories.service';
 import { LocationsService } from 'src/locations/services/locations.service';
+import { ValorationService } from '../valoration/valoration.service';
 @Injectable()
 export class CompaniesService {
   constructor(
@@ -18,6 +19,8 @@ export class CompaniesService {
     private readonly categoryService: CategoriesService,
     @Inject(forwardRef(() => LocationsService))
     private readonly locationService: LocationsService,
+    @Inject(forwardRef(() => ValorationService))
+    private readonly valorationService: ValorationService,
   ) {}
 
   async findAll(categoriesName?: string[]) {
@@ -46,13 +49,13 @@ export class CompaniesService {
         ]);
         return result.map((item) => ({
           ...item,
-          rating: this.calculateRating(item.rating),
+          rating: this.valorationService.getValorationByCompany(item._id),
         }));
       }
       const result = await this.companyModel.find().populate('category');
       return result.map((item) => ({
         ...item.toObject(),
-        rating: this.calculateRating(item.rating) || 0,
+        rating: this.valorationService.getValorationByCompany(item._id),
       }));
     } catch (error) {
       throw new HttpException(error, 500);
@@ -121,7 +124,7 @@ export class CompaniesService {
       const result = await this.companyModel.findById(id).populate('category');
       return {
         ...result.toObject(),
-        rating: this.calculateRating(result.rating) || 0,
+        rating: this.valorationService.getValorationByCompany(result._id),
       };
     } catch (error) {
       throw new NotFoundException(`Company #${id} not found`);
@@ -133,55 +136,6 @@ export class CompaniesService {
       return await this.companyModel.find({ category: id });
     } catch (error) {
       throw new NotFoundException(`Company #${id} not found`);
-    }
-  }
-
-  async addValoration(id: string, indexValoration: number) {
-    try {
-      if (
-        indexValoration < 0 ||
-        indexValoration > 4 ||
-        !Number.isInteger(indexValoration)
-      ) {
-        throw new HttpException('Index valoration is not valid', 400);
-      }
-      const company = await this.findOne(id);
-      if (!company) {
-        throw new NotFoundException(`Company #${id} not found`);
-      }
-
-      const rating = company.rating;
-      rating[indexValoration] = rating[indexValoration] + 1;
-      const result = await this.companyModel.findByIdAndUpdate(
-        id,
-        {
-          $set: { rating },
-        },
-        { new: true },
-      );
-      return this.calculateRating(result.rating);
-    } catch (error) {
-      throw new NotFoundException(`Company #${id} not found`);
-    }
-  }
-
-  // [5, 0, 3, 0, 0] = 5 * 5 + 0 * 4 + 3 * 3 + 0 * 2 + 0 * 1 = 20 / 8 = 2.5
-  // puntaje total / cantidad de votos
-  private calculateRating(rating: number[]) {
-    try {
-      if (!rating) {
-        return 0;
-      }
-      let totalScore = 0;
-      for (let i = 0; i < rating.length; i++) {
-        totalScore += rating[i] * (i + 1);
-      }
-
-      const totalVotes = rating.reduce((a, b) => a + b, 0);
-
-      return totalScore / totalVotes;
-    } catch (error) {
-      throw new HttpException(error, 500);
     }
   }
 }

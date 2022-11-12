@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateValorationDto } from 'src/companies/dtos/valoration.dto';
@@ -9,6 +9,7 @@ import { Valoration } from './../../schemas/valoration.schema';
 export class ValorationService {
   constructor(
     @InjectModel(Valoration.name) private valorationModel: Model<Valoration>,
+    @Inject(forwardRef(() => CompaniesService))
     private readonly companyService: CompaniesService,
   ) {}
 

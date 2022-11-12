@@ -30,15 +30,6 @@ export class CompaniesController {
     return this.companyService.create(company);
   }
 
-  @Post('rating/:id')
-  @Roles(Role.USER)
-  addValoration(
-    @Param('id') id: string,
-    @Body('valoration') valoration: number,
-  ) {
-    return this.companyService.addValoration(id, valoration);
-  }
-
   @Get('category/:id')
   @Roles(Role.ADMIN)
   findByCategory(@Param('id') id: string) {
