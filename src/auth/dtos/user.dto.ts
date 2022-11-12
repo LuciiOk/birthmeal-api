@@ -11,13 +11,17 @@ export class CreateUserDTO {
   @IsString({
     message: 'El nombre debe ser una cadena de texto',
   })
-  @ApiProperty()
+  @ApiProperty({
+    description: 'El nombre del usuario',
+  })
   readonly name: string;
 
   @IsDateString({
     message: 'La fecha de nacimiento debe ser una fecha válida',
   })
-  @ApiProperty()
+  @ApiProperty({
+    description: 'La fecha de nacimiento del usuario',
+  })
   readonly birthdate: Date;
 
   @IsNotEmpty()
