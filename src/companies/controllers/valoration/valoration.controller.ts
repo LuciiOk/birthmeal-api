@@ -32,8 +32,6 @@ export class ValorationController {
   ) {
     const { userID } = req.user as PayloadToken;
 
-    console.log('userID', userID, 'companyID', companyID, 'valoration', valoration);
-
     return this.valorationService.create(valoration, userID.toString(), companyID);
   }
 
