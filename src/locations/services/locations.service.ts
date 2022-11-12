@@ -31,9 +31,11 @@ export class LocationsService {
     return createdLocation.save();
   }
 
-  async createMany(locations: LocationDto[], company: Company): Promise<Location[]> {
+  async createMany(
+    locations: LocationDto[],
+    company: Company,
+  ): Promise<Location[]> {
     try {
-
       const locationsWithCompany = locations.map((location) => {
         return { ...location, company: company._id };
       });
@@ -63,7 +65,10 @@ export class LocationsService {
     coordinates: [number, number],
     companyId: string,
   ): Promise<Location> {
-    const locations = await this.getCompanyLocationsCoords(coordinates, companyId);
+    const locations = await this.getCompanyLocationsCoords(
+      coordinates,
+      companyId,
+    );
     return locations[0];
   }
 
@@ -132,5 +137,9 @@ export class LocationsService {
 
   private deg2rad(deg: number): number {
     return deg * (Math.PI / 180);
+  }
+
+  async removeMany(locations: Location[]) {
+    return this.locationModel.deleteMany({ $in: locations });
   }
 }

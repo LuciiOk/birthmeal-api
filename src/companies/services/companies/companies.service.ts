@@ -88,8 +88,39 @@ export class CompaniesService {
     }
   }
 
-  update(id: string, changes: UpdateCompanyDto) {
+  async update(id: string, changes: UpdateCompanyDto) {
     try {
+      if (changes.locations) {
+        const locationsCompany =
+          await this.locationService.getLocationsByCompany(id);
+        // eliminar las localizaciones que no esten en el array
+        const locationsToDelete = locationsCompany.filter(
+          (location) => !changes.locations.includes(location._id),
+        );
+
+        if (locationsToDelete.length > 0) {
+          await this.locationService.removeMany(locationsToDelete);
+        }
+
+        // actualizar las localizaciones que esten en el array
+        const locationsToUpdate = locationsCompany.filter((location) =>
+          changes.locations.includes(location._id),
+        );
+
+        if (locationsToUpdate.length > 0) {
+        }
+
+        // crear las localizaciones que no esten en el array
+        const locationsToCreate = changes.locations.filter(
+          (location) => !locationsCompany.includes(location as any),
+        );
+
+        if (locationsToCreate.length > 0) {
+          const company = await this.findOne(id);
+
+          await this.locationService.createMany(locationsToCreate, company);
+        }
+      }
       const result = this.companyModel
         .findByIdAndUpdate(
           id,
