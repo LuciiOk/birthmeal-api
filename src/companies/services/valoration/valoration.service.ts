@@ -1,6 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CreateValorationDto } from 'src/companies/dtos/valoration.dto';
 import { CompaniesService } from '../companies/companies.service';
 import { Valoration } from './../../schemas/valoration.schema';
 
@@ -11,20 +12,38 @@ export class ValorationService {
     private readonly companyService: CompaniesService,
   ) {}
 
-  async create(valoration: Valoration, userId: string) {
+  async create(
+    valoration: number,
+    userId: string,
+    companyId: string,
+  ) {
     try {
-      const newValoration = new this.valorationModel(valoration);
-      newValoration.user = userId;
-      // verificar si el usuario ya ha votado
+      const companyDB = await this.companyService.findOne(companyId);
+      if (!companyDB) {
+        throw new HttpException('Company not found', 404);
+      }
+
       const valorationDB = await this.valorationModel.findOne({
-        company: valoration.company,
+        company: companyId,
         user: userId,
       });
+
       if (valorationDB) {
-        this.update(valorationDB._id, valoration.stars, userId);
+        // update
+        valorationDB.stars = valoration;
+        await valorationDB.save();
+        return this.getValorationByCompany(companyId);
       }
-      await newValoration.save();
-      return newValoration;
+
+      const valorationCreated = new this.valorationModel({
+        stars: valoration,
+        company: companyId,
+        user: userId,
+      });
+
+      await valorationCreated.save();
+      console.log('valorationCreated', valorationCreated);
+      return this.getValorationByCompany(companyId);
     } catch (error) {
       throw new HttpException(error, 500);
     }
@@ -59,6 +78,7 @@ export class ValorationService {
       for (let i = 0; i < valorations.length; i++) {
         rating[valorations[i].stars - 1]++;
       }
+      console.log(rating);
       const ratingCalculated = this.calculateRating(rating);
       return ratingCalculated;
     } catch (error) {
@@ -79,7 +99,9 @@ export class ValorationService {
       }
 
       const totalVotes = rating.reduce((a, b) => a + b, 0);
-
+      if (totalVotes === 0 || totalScore === 0) {
+        return 0;
+      }
       return totalScore / totalVotes;
     } catch (error) {
       throw new HttpException(error, 500);

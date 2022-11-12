@@ -9,6 +9,7 @@ import { Category, CategorySchema } from './schemas/categories.schema';
 import { LocationsModule } from 'src/locations/locations.module';
 import { Valoration, ValorationSchema } from './schemas/valoration.schema';
 import { ValorationService } from './services/valoration/valoration.service';
+import { ValorationController } from './controllers/valoration/valoration.controller';
 @Module({
   imports: [
     MongooseModule.forFeature([
@@ -27,7 +28,7 @@ import { ValorationService } from './services/valoration/valoration.service';
     ]),
     LocationsModule,
   ],
-  controllers: [CategoriesController, CompaniesController],
+  controllers: [CategoriesController, CompaniesController, ValorationController],
   providers: [CategoriesService, CompaniesService, ValorationService],
   exports: [CompaniesService, CategoriesService],
 })
