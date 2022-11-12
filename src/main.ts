@@ -8,7 +8,7 @@ async function bootstrap() {
 
   const options = new DocumentBuilder()
     .setTitle('Birthmeal API')
-    .setDescription('The Birthmeal API description')
+    .setDescription('API de Birthmeal, una aplicación para gestionar los cumpleaños de tus amigos y ademas encontrar lugares para celebrarlos con beneficios')
     .setVersion('2.0')
     .addTag('birthmeal')
     .build();
