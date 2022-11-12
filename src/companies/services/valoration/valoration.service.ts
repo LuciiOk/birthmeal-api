@@ -1,7 +1,6 @@
 import { forwardRef, HttpException, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateValorationDto } from 'src/companies/dtos/valoration.dto';
 import { CompaniesService } from '../companies/companies.service';
 import { Valoration } from './../../schemas/valoration.schema';
 
