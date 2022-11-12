@@ -12,11 +12,7 @@ export class ValorationService {
     private readonly companyService: CompaniesService,
   ) {}
 
-  async create(
-    valoration: number,
-    userId: string,
-    companyId: string,
-  ) {
+  async create(valoration: number, userId: string, companyId: string) {
     try {
       const companyDB = await this.companyService.findOne(companyId);
       if (!companyDB) {
@@ -30,9 +26,7 @@ export class ValorationService {
 
       if (valorationDB) {
         // update
-        valorationDB.stars = valoration;
-        await valorationDB.save();
-        return this.getValorationByCompany(companyId);
+        return this.update(valorationDB._id, valoration, userId);
       }
 
       const valorationCreated = new this.valorationModel({
@@ -58,12 +52,19 @@ export class ValorationService {
       if (valorationDB.user.toString() !== userId) {
         throw new HttpException('Unauthorized', 401);
       }
+
+      if (valorationDB.stars === stars) {
+        throw new HttpException('Ya calificaste con esta puntuación', 400);
+      }
       valorationDB.stars = stars;
 
       await valorationDB.save();
 
       return this.getValorationByCompany(valorationDB.company.toString());
     } catch (error) {
+      if (error.status) {
+        throw new HttpException(error.message, error.status);
+      }
       throw new HttpException(error, 500);
     }
   }

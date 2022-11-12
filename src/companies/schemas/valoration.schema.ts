@@ -4,7 +4,7 @@ import * as mongoose from 'mongoose';
 
 @Schema()
 export class Valoration extends Document {
-  @Prop({ required: true })
+  @Prop({ required: true, min: 1, max: 5 })
   stars: number;
 
   @Prop({
