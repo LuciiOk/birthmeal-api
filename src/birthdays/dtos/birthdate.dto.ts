@@ -1,12 +1,5 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import {
-  IsBoolean,
-  IsDate,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-} from 'class-validator';
+import { IsBoolean, IsDateString, IsOptional, IsString } from 'class-validator';
 
 export class BirthdateDto {
   @ApiProperty({
@@ -21,7 +14,7 @@ export class BirthdateDto {
     type: Date,
     description: 'La fecha de nacimiento',
   })
-  @IsDate({
+  @IsDateString({
     message: 'La fecha de nacimiento debe ser una fecha válida',
   })
   birthdate: Date;
