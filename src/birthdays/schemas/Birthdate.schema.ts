@@ -11,7 +11,7 @@ export class Birthdate extends Document {
   @Prop({ required: true })
   birthdate: Date;
 
-  @Prop()
+  @Prop({ required: true })
   remind: boolean;
 
   @Prop({ required: true, type: MongooseSchema.Types.ObjectId, ref: User.name })
