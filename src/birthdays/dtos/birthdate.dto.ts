@@ -37,10 +37,12 @@ export class BirthdateDto {
   @ApiProperty({
     description: 'El ID de la notificación',
   })
+  @IsOptional({
+    message: 'El ID de la notificación debe ser opcional',
+  })
   @IsString({
     message: 'El ID del la notificación de expo debe ser una cadena de texto',
   })
-  @IsOptional()
   notificationId: string;
 }
 
