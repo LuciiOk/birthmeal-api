@@ -1,17 +1,30 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiBody } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
+
 export class GetCordinatesDto {
-  @IsString()
-  @ApiProperty()
+  @IsString({
+    message: 'La dirección debe ser una cadena de texto',
+  })
+  @ApiProperty({
+    description: 'La dirección de la empresa',
+  })
   street: string;
 
-  @IsString()
-  @ApiProperty()
+  @IsString({
+    message: 'La ciudad debe ser una cadena de texto',
+  })
+  @ApiProperty({
+    description: 'La comuna de la empresa, debe ser una comuna Chilena',
+  })
   commune: string;
 
-  @IsString()
+  @IsString({
+    message: 'La región debe ser una cadena de texto',
+  })
   @IsOptional()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'La región de la empresa, debe ser una región Chilena',
+  })
   region?: string;
 }

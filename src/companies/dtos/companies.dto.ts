@@ -8,6 +8,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
+import { LocationDto } from 'src/locations/dtos/locations.dto';
 export class CompanyDto {
   @IsString({
     message: 'El nombre debe ser una cadena de texto',
@@ -70,10 +71,10 @@ export class CompanyDto {
     message: 'El campo de las ubicaciones debe ser un arreglo',
   })
   @ApiProperty({
-    type: [String],
+    type: [Object],
     description: 'Arreglo de las ubicaciones de la empresa',
   })
-  locations: any[];
+  locations: LocationDto[];
 }
 
 export class UpdateCompanyDto extends PartialType(CompanyDto) {}

@@ -26,8 +26,9 @@ export class CompaniesController {
   @Post()
   @Public()
   @Roles(Role.ADMIN)
-  create(@Body() user: CompanyDto) {
-    return this.companyService.create(user);
+  create(@Body() company: CompanyDto) {
+    console.log(company.locations);
+    return this.companyService.create(company);
   }
 
   @Post('rating/:id')
