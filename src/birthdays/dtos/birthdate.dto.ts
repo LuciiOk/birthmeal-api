@@ -1,22 +1,45 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsBoolean, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsDate,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 
 export class BirthdateDto {
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'El nombre del cumpleañero',
+  })
+  @IsString({
+    message: 'El nombre debe ser una cadena de texto',
+  })
   name: string;
 
-  @ApiProperty()
-  @IsNumber()
-  @IsPositive()
-  birthdate: number;
+  @ApiProperty({
+    type: Date,
+    description: 'La fecha de nacimiento',
+  })
+  @IsDate({
+    message: 'La fecha de nacimiento debe ser una fecha válida',
+  })
+  birthdate: Date;
 
-  @ApiProperty()
-  @IsBoolean()
+  @ApiProperty({
+    description: 'Si el usuario desea recibir notificaciones',
+  })
+  @IsBoolean({
+    message: 'El valor de la propiedad "remind" debe ser un booleano',
+  })
   remind: boolean;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'El ID de la notificación',
+  })
+  @IsString({
+    message: 'El ID del la notificación de expo debe ser una cadena de texto',
+  })
   @IsOptional()
   notificationId: string;
 }
