@@ -59,6 +59,9 @@ export class CompaniesController {
   @Get()
   @Public()
   findAll(@Query('categories') categories: string[]) {
+    if (!categories) {
+      return this.companyService.findAll();
+    }
     return this.companyService.findAll(categories);
   }
 
