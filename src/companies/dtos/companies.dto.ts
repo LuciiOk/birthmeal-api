@@ -3,7 +3,7 @@ import {
   IsArray,
   IsMongoId,
   IsNumber,
-  IsObject,
+  IsOptional,
   IsPositive,
   IsString,
   IsUrl,
@@ -55,6 +55,7 @@ export class CompanyDto {
   @IsNumber()
   @IsPositive()
   @ApiProperty()
+  @IsOptional()
   readonly rating: number;
 
   @IsMongoId({
@@ -65,8 +66,13 @@ export class CompanyDto {
   })
   readonly category: string;
 
-  @IsObject()
-  @ApiProperty()
+  @IsArray({
+    message: 'El campo de las ubicaciones debe ser un arreglo',
+  })
+  @ApiProperty({
+    type: [String],
+    description: 'Arreglo de las ubicaciones de la empresa',
+  })
   locations: any[];
 }
 
