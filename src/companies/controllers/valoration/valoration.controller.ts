@@ -16,7 +16,8 @@ import { RolesGuard } from 'src/auth/guards/role.guard';
 import { PayloadToken } from 'src/auth/models/Payload.model';
 import { Role } from 'src/auth/schemas/auth.schema';
 import { ValorationService } from 'src/companies/services/valoration/valoration.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
+import { CreateValorationDto } from 'src/companies/dtos/valoration.dto';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('valoration')
@@ -28,16 +29,14 @@ export class ValorationController {
   @ApiTags('Realizar una calificación a una empresa; 1 a 5')
   create(
     @Req() req: Request,
-    @Body('valoration') valoration: number,
+    @Body() valoration: CreateValorationDto,
     @Param('companyID') companyID: string,
   ) {
     const { userID } = req.user as PayloadToken;
 
-    return this.valorationService.create(
-      valoration,
-      userID.toString(),
-      companyID,
-    );
+    const { valoration: stars } = valoration;
+
+    return this.valorationService.create(stars, userID.toString(), companyID);
   }
 
   @Public()
