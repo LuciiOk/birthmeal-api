@@ -124,7 +124,7 @@ export class CompaniesService {
       const result = await this.companyModel.findById(id).populate('category');
       return {
         ...result.toObject(),
-        rating: this.valorationService.getValorationByCompany(result._id),
+        rating: await this.valorationService.getValorationByCompany(result._id),
       };
     } catch (error) {
       throw new NotFoundException(`Company #${id} not found`);

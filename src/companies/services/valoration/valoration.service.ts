@@ -72,13 +72,12 @@ export class ValorationService {
     try {
       const valorations = await this.valorationModel
         .find({ company: companyId })
-        .populate('user');
+
       // separar los votos por la cantidad de estrellas
       const rating = [0, 0, 0, 0, 0];
       for (let i = 0; i < valorations.length; i++) {
         rating[valorations[i].stars - 1]++;
       }
-      console.log(rating);
       const ratingCalculated = this.calculateRating(rating);
       return ratingCalculated;
     } catch (error) {
