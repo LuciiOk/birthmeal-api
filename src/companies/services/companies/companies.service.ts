@@ -47,16 +47,18 @@ export class CompaniesService {
             },
           },
         ]);
-        return result.map((item) => ({
+        const companies = result.map(async (item) => ({
           ...item,
-          rating: this.valorationService.getValorationByCompany(item._id),
+          rating: await this.valorationService.getValorationByCompany(item._id),
         }));
+        return Promise.all(companies);
       }
       const result = await this.companyModel.find().populate('category');
-      return result.map((item) => ({
+      const companies = result.map(async (item) => ({
         ...item.toObject(),
-        rating: this.valorationService.getValorationByCompany(item._id),
+        rating: await this.valorationService.getValorationByCompany(item._id),
       }));
+      return Promise.all(companies);
     } catch (error) {
       throw new HttpException(error, 500);
     }
