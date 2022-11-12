@@ -101,7 +101,9 @@ export class ValorationService {
       if (totalVotes === 0 || totalScore === 0) {
         return 0;
       }
-      return totalScore / totalVotes;
+      const result:number = totalScore / totalVotes;
+
+      return Number(result.toFixed(2));
     } catch (error) {
       throw new HttpException(error, 500);
     }
