@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Company } from 'src/companies/schemas/companies.schema';
 import { GoogleMapsService } from 'src/google-maps/google-maps.service';
+import { LocationDto } from '../dtos/locations.dto';
 import { GeoLocation, Location } from '../schemas/locations.schema';
 
 @Injectable()
@@ -30,12 +31,11 @@ export class LocationsService {
     return createdLocation.save();
   }
 
-  async createMany(locations: Location[], company: Company): Promise<Location[]> {
+  async createMany(locations: LocationDto[], company: Company): Promise<Location[]> {
     try {
 
       const locationsWithCompany = locations.map((location) => {
-        location.company = company;
-        return location;
+        return { ...location, company: company._id };
       });
       const createdLocations = await this.locationModel.insertMany(
         locationsWithCompany,

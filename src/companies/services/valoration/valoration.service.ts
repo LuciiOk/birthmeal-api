@@ -36,7 +36,6 @@ export class ValorationService {
       });
 
       await valorationCreated.save();
-      console.log('valorationCreated', valorationCreated);
       return this.getValorationByCompany(companyId);
     } catch (error) {
       throw new HttpException(error, 500);

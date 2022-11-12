@@ -27,7 +27,6 @@ export class CompaniesController {
   @Public()
   @Roles(Role.ADMIN)
   create(@Body() company: CompanyDto) {
-    console.log(company.locations);
     return this.companyService.create(company);
   }
 

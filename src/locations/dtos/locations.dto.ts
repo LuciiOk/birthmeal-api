@@ -1,7 +1,14 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsArray, IsObject, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsObject, IsString } from 'class-validator';
 
-export class LocationDto extends Document {
+export class GeometryDTO {
+  @IsNumber({}, { each: true, message: 'El valor debe ser un número' })
+  @ApiProperty({
+    description: 'Las coordenadas de la ubicación de la empresa',
+  })
+  readonly coordinates: number[];
+}
+export class LocationDto {
   @IsString({
     message: 'El nombre debe ser una cadena de texto',
   })
@@ -34,16 +41,6 @@ export class LocationDto extends Document {
     description: 'Georeferencia de la empresa',
   })
   readonly geometry: GeometryDTO;
-}
-
-export class GeometryDTO extends Document {
-  @IsArray({
-    message: 'Las coordenadas deben ser un arreglo',
-  })
-  @ApiProperty({
-    description: 'Las coordenadas de la ubicación de la empresa',
-  })
-  readonly coordinates: number[];
 }
 
 export class UpdateLocationDto extends PartialType(LocationDto) {}

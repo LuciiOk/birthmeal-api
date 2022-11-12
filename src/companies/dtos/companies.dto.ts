@@ -71,8 +71,9 @@ export class CompanyDto {
     message: 'El campo de las ubicaciones debe ser un arreglo',
   })
   @ApiProperty({
-    type: [Object],
+    type: [LocationDto],
     description: 'Arreglo de las ubicaciones de la empresa',
+    title: 'Ubicaciones',
   })
   locations: LocationDto[];
 }
