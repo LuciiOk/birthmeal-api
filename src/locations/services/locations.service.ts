@@ -140,6 +140,9 @@ export class LocationsService {
   }
 
   async removeMany(locations: Location[]) {
-    return this.locationModel.deleteMany({ $in: locations });
+    // remove locations in bulk
+    locations.forEach((location) => {
+      location.remove();
+    });
   }
 }
