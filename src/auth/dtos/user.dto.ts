@@ -24,9 +24,15 @@ export class CreateUserDTO {
   })
   readonly birthdate: Date;
 
-  @IsNotEmpty()
-  @ValidateNested()
-  @ApiProperty()
+  @IsNotEmpty({
+    message: 'El objeto de autenticación no puede estar vacío',
+  })
+  @ValidateNested({
+    message: 'El objeto de autenticación no puede estar vacío',
+  })
+  @ApiProperty({
+    description: 'El username y password del usuario',
+  })
   readonly userAuth: AuthDTO;
 }
 

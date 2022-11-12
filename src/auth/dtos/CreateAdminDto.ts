@@ -1,16 +1,31 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class CreateAdminDTO {
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'El nombre del administrador',
+  })
+  @IsString({
+    message: 'El nombre debe ser una cadena de texto',
+  })
+  @IsEmail({
+    message: 'El nombre debe ser un correo electrónico',
+  })
   email: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'La contraseña del administrador',
+  })
+  @IsString({
+    message: 'La contraseña debe ser una cadena de texto',
+  })
   password: string;
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({
+    description: 'La contraseña del administrador',
+  })
+  @IsString({
+    message: 'La contraseña debe ser una cadena de texto',
+  })
   confirmPassword: string;
 }
