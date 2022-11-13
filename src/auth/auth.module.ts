@@ -16,6 +16,9 @@ import { UserController } from './controllers/user.controller';
 import config from 'src/config';
 import { CompaniesModule } from 'src/companies/companies.module';
 import { AdminStrategy } from './strategies/admin.strategy';
+import { GoogleAuthController } from './controllers/google-auth.controller';
+import { GoogleAuthService } from './services/google-auth.service';
+import { GoogleStrategy } from './strategies/google.strategy';
 
 @Module({
   imports: [
@@ -43,8 +46,23 @@ import { AdminStrategy } from './strategies/admin.strategy';
       }),
     }),
   ],
-  controllers: [AuthController, UserController],
-  providers: [AuthService, UserService, LocalStrategy, JwtStrategy, AdminStrategy],
+  controllers: [AuthController, UserController, GoogleAuthController],
+  providers: [
+    AuthService,
+    UserService,
+    LocalStrategy,
+    JwtStrategy,
+    AdminStrategy,
+    GoogleAuthService,
+    GoogleStrategy,
+    {
+      provide: 'GOOGLE_AUTH',
+      useFactory: (configService: ConfigType<typeof config>) => {
+        return configService.googleAuth;
+      },
+      inject: [config.KEY],
+    },
+  ],
   exports: [AuthService, UserService],
 })
 export class AuthModule {}
