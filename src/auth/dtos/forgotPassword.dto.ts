@@ -30,6 +30,12 @@ export class VerifyDto {
 }
 
 export class ResetPasswordDto {
+  @IsEmail({}, { message: 'Por favor, ingrese un correo válido' })
+  @ApiProperty({
+    description: 'Correo electrónico',
+  })
+  email: string;
+
   @IsNotEmpty({
     message: 'Por favor, ingrese una contraseña',
   })

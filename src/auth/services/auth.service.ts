@@ -16,7 +16,7 @@ import { Auth, Role } from '../schemas/auth.schema';
 import { PayloadToken } from '../models/Payload.model';
 import { CreateAdminDTO } from '../dtos/CreateAdminDto';
 import { MailService } from 'src/mail/mail.service';
-import { VerifyDto } from '../dtos/forgotPassword.dto';
+import { ResetPasswordDto, VerifyDto } from '../dtos/forgotPassword.dto';
 
 @Injectable()
 export class AuthService {
@@ -143,5 +143,27 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     throw new HttpException('Código correcto', HttpStatus.OK);
+  }
+
+  async resetPassword(resetPassword: ResetPasswordDto) {
+    const user = await this.findOneByEmail(resetPassword.email);
+
+    if (!user)
+      throw new HttpException(
+        'El correo electrónico no existe',
+        HttpStatus.NOT_FOUND,
+      );
+
+    if (resetPassword.password !== resetPassword.confirmPassword)
+      throw new HttpException(
+        'Las contraseñas no coinciden',
+        HttpStatus.BAD_REQUEST,
+      );
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(resetPassword.password, salt);
+    user.password = hashedPassword;
+    user.code = null;
+    await user.save();
   }
 }
