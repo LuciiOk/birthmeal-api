@@ -45,6 +45,9 @@ jobs:
         echo MONGO_PORT=$MONGO_PORT >> .env
         echo MONGO_HOST=$MONGO_HOST >> .env
         echo MONGO_CONNECTION=$MONGO_CONNECTION >> .env
+        echo GOOGLE_AUTH_CLIENT_ID=$GOOGLE_AUTH_CLIENT_ID >> .env
+        echo GOOGLE_AUTH_CLIENT_SECRET=$GOOGLE_AUTH_CLIENT_SECRET >> .env
+        echo GOOGLE_AUTH_REDIRECT_URI=$GOOGLE_AUTH_REDIRECT_URI >> .env
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
