@@ -30,6 +30,7 @@ jobs:
         MONGO_PORT: 27017
         MONGO_HOST: 45.7.231.52:27017
         MONGO_CONNECTION: mongodb
+        GOOGLE_AUTH_CLIENT_ID: 833330700978-o02sr4inlsodup73gjhfhgumkjnia7on.apps.googleusercontent.com
         GOOGLE_AUTH_CLIENT_SECRET: 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
         GOOGLE_AUTH_REDIRECT_URI: http://www.birthmeal.fun/api/google-auth/redirect
       run: |
