@@ -111,7 +111,10 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await this.findOneByEmail(email);
     if (!user)
-      throw new HttpException('El correo no existe', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'El correo electrónico ingresado no existe',
+        HttpStatus.NOT_FOUND,
+      );
 
     // generate code with 4 digits
     const code = Math.floor(1000 + Math.random() * 9000);
@@ -130,9 +133,15 @@ export class AuthService {
   async verifyCode(verify: VerifyDto) {
     const user = await this.findOneByEmail(verify.email);
     if (!user)
-      throw new HttpException('El correo no existe', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'El correo electrónico no existe',
+        HttpStatus.NOT_FOUND,
+      );
     if (user.code !== verify.code)
-      throw new HttpException('Código incorrecto', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'El código ingresado es incorrecto',
+        HttpStatus.BAD_REQUEST,
+      );
     throw new HttpException('Código correcto', HttpStatus.OK);
   }
 }
