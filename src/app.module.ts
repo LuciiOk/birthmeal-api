@@ -14,6 +14,7 @@ import { DatabaseModule } from './database/database.module';
 import { GoogleMapsModule } from './google-maps/google-maps.module';
 import { RouterModule } from '@nestjs/core';
 import { ImgurModule } from './imgur/imgur.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ImgurModule } from './imgur/imgur.module';
     BirthdaysModule,
     GoogleMapsModule,
     ImgurModule,
+    MailModule,
   ],
   controllers: [AppController, CompaniesController],
   providers: [],

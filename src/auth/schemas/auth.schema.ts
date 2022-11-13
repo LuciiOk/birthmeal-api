@@ -28,6 +28,9 @@ export class Auth extends Document {
 
   @Prop({ required: true, default: Role.USER, enum: Role })
   role: string;
+
+  @Prop({ expires: '1d', default: Date.now })
+  code: string;
 }
 
 export const AuthSchema = SchemaFactory.createForClass(Auth);

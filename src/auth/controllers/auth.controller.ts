@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { SanitizeMongooseModelInterceptor } from 'nestjs-mongoose-exclude';
 import { CreateAdminDTO } from '../dtos/CreateAdminDto';
-import { ForgotPasswordDto } from '../dtos/forgotPassword.dto';
+import { ForgotPasswordDto, VerifyDto } from '../dtos/forgotPassword.dto';
 
 import { CreateUserDTO } from '../dtos/user.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -65,7 +65,21 @@ export class AuthController {
 
   @Post('forgot-password')
   public async forgotPassword(@Body() email: ForgotPasswordDto) {
-    // return this.authService.forgotPassword(email);
+    return this.authService.forgotPassword(email.email);
+  }
+
+  @Post('verify')
+  public async verify(@Body() verifyToken: VerifyDto) {
+    try {
+      return this.authService.verifyCode(verifyToken);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
+  @Post('reset-password')
+  public async resetPassword(@Body() resetPasswordDto: ForgotPasswordDto) {
+    return;
   }
 
   @Get('verify-token')

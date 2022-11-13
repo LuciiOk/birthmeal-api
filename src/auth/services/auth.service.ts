@@ -1,7 +1,9 @@
 import {
   BadRequestException,
+  forwardRef,
   HttpException,
   HttpStatus,
+  Inject,
   Injectable,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -13,12 +15,16 @@ import { AuthDTO, LoginDTO } from '../dtos/auth.dto';
 import { Auth, Role } from '../schemas/auth.schema';
 import { PayloadToken } from '../models/Payload.model';
 import { CreateAdminDTO } from '../dtos/CreateAdminDto';
+import { MailService } from 'src/mail/mail.service';
+import { VerifyDto } from '../dtos/forgotPassword.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(Auth.name) private authModel: Model<Auth>,
     private jwtService: JwtService,
+    @Inject(forwardRef(() => MailService))
+    private mailService: MailService,
   ) {}
 
   async findOne(id: string): Promise<Auth> {
@@ -106,6 +112,27 @@ export class AuthService {
     const user = await this.findOneByEmail(email);
     if (!user)
       throw new HttpException('El correo no existe', HttpStatus.NOT_FOUND);
-    return user;
+
+    // generate code with 4 digits
+    const code = Math.floor(1000 + Math.random() * 9000);
+
+    // send email with code
+    await this.mailService.sendEmail(
+      email,
+      'Código de recuperación',
+      code.toString(),
+    );
+    // save code in user
+    user.code = code.toString();
+    await user.save();
+  }
+
+  async verifyCode(verify: VerifyDto) {
+    const user = await this.findOneByEmail(verify.email);
+    if (!user)
+      throw new HttpException('El correo no existe', HttpStatus.NOT_FOUND);
+    if (user.code !== verify.code)
+      throw new HttpException('Código incorrecto', HttpStatus.BAD_REQUEST);
+    throw new HttpException('Código correcto', HttpStatus.OK);
   }
 }
