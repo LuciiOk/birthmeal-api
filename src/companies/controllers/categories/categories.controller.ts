@@ -9,6 +9,7 @@ import {
   HttpCode,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { Roles } from 'src/auth/decorators/role.decorator';
@@ -52,9 +53,9 @@ export class CategoriesController {
     return this.categoryService.getCategoriesWithCompanies();
   }
 
-  @Get('paginate')
   @Roles(Role.ADMIN)
-  paginate(@Param('page') page: number = 1, @Param('limit') limit: number = 9) {
+  @Get('paginate')
+  paginate(@Query('page') page: number = 1, @Query('limit') limit: number = 9) {
     console.log(page, limit);
     return this.categoryService.paginate(page, limit);
   }
