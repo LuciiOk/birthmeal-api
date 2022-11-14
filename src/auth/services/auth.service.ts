@@ -40,7 +40,7 @@ export class AuthService {
   async create(auth: AuthDTO): Promise<Auth> {
     try {
       if (auth.password !== auth.confirmPassword)
-        throw new BadRequestException('Passwords do not match');
+        throw new BadRequestException('Las contraseñas no coinciden');
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(auth.password, salt);
       const result = await this.authModel.create({
@@ -72,10 +72,10 @@ export class AuthService {
   async validateUser(auth: LoginDTO) {
     const user = await this.findOneByEmail(auth.email);
     if (!user)
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Correo o contraseña incorrectos', HttpStatus.UNAUTHORIZED);
     const isMatch = await bcrypt.compare(auth.password, user.password);
     if (!isMatch)
-      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('Correo o contraseña incorrectos', HttpStatus.UNAUTHORIZED);
 
     return user;
   }
