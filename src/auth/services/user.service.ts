@@ -21,7 +21,9 @@ export class UserService {
       user.userAuth.email,
     );
     if (userExists)
-      throw new BadRequestException('Already exists an user with this email');
+      throw new BadRequestException(
+        'El correo electrónico ingresado ya existe',
+      );
     const auth = await this.authService.create({
       email: user.userAuth.email,
       password: user.userAuth.password,
