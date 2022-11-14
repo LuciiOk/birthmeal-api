@@ -64,6 +64,39 @@ export class CompaniesService {
     }
   }
 
+  async paginate(page: number, limit: number) {
+    try {
+      // return companies paginated
+      let companies = await this.companyModel
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate('category');
+
+      const total = await this.companyModel.countDocuments();
+      const totalPages = Math.ceil(total / limit) || 1;
+      const totalPerPage = companies.length;
+
+      const result = companies.map(async (item) => ({
+        ...item.toObject(),
+        rating: await this.valorationService.getValorationByCompany(item._id),
+      }));
+
+      console.log(page, limit, total, totalPages, totalPerPage);
+
+      return {
+        data: await Promise.all(result),
+        total,
+        totalPerPage,
+        totalPages,
+        page: Number(page),
+        limit: Number(limit),
+      };
+    } catch (error) {
+      throw new HttpException(error, 500);
+    }
+  }
+
   async create(data: CompanyDto) {
     try {
       const newCompany = new this.companyModel(data);

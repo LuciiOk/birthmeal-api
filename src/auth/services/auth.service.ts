@@ -98,7 +98,8 @@ export class AuthService {
 
   async verifyToken(token: string): Promise<PayloadToken> {
     try {
-      const payload = this.jwtService.verify(token);
+      const tokenT = token.split(' ')[1];
+      const payload = this.jwtService.verify(tokenT);
       if (!payload)
         throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
       return payload;

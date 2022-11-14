@@ -52,6 +52,13 @@ export class CategoriesController {
     return this.categoryService.getCategoriesWithCompanies();
   }
 
+  @Get('paginate')
+  @Roles(Role.ADMIN)
+  paginate(@Param('page') page: number = 1, @Param('limit') limit: number = 9) {
+    console.log(page, limit);
+    return this.categoryService.paginate(page, limit);
+  }
+
   @Get()
   @Roles(Role.ADMIN)
   findAll() {

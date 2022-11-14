@@ -30,6 +30,13 @@ export class CompaniesController {
     return this.companyService.create(company);
   }
 
+  @Get('paginate')
+  @Roles(Role.ADMIN)
+  paginate(@Query('page') page: number, @Query('limit') limit: number) {
+    console.log(page, limit);
+    return this.companyService.paginate(page, limit);
+  }
+
   @Get('category/:id')
   @Roles(Role.ADMIN)
   findByCategory(@Param('id') id: string) {

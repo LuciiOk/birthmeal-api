@@ -32,6 +32,31 @@ export class CategoriesService {
     }
   }
 
+  public async paginate(page: number, limit: number) {
+    try {
+      const result = await this.categoryModel
+        .find()
+        .skip((page - 1) * limit)
+        .limit(limit);
+      const total = await this.categoryModel.countDocuments();
+      const totalPages = Math.ceil(total / limit) || 1;
+      const totalPerPage = result.length;
+
+      console.log(totalPages, totalPerPage, total, page, limit);
+
+      return {
+        data: result,
+        total,
+        totalPages,
+        totalPerPage,
+        page: Number(page),
+        limit: Number(limit),
+      };
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+
   async findOne(id: string) {
     try {
       const Category = await this.categoryModel.findById(id).exec();
