@@ -1,12 +1,13 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
-import { IsNumber, IsObject, IsString } from 'class-validator';
+import { IsNumber, IsObject, IsString, MaxLength } from 'class-validator';
 
 
 export class GeometryDTO {
   @IsNumber({}, { each: true, message: 'El valor debe ser un número' })
+  @MaxLength(2, { message: 'El arreglo debe tener solo 2 valores (latitud y longitud)' })
   @ApiProperty({
     type: [Number],
-    description: 'Las coordenadas de la ubicación de la empresa',
+    description: 'Las coordenadas de la ubicación de la empresa [latitud, longitud]',
   })
   readonly coordinates: number[];
 }
