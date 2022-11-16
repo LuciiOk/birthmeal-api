@@ -1,4 +1,5 @@
 import { Body, Controller, Post, Get, Param } from '@nestjs/common';
+import { LocationDto } from '../dtos/locations.dto';
 import { Location } from '../schemas/locations.schema';
 import { LocationsService } from '../services/locations.service';
 import { RegionService } from '../services/region.service';
@@ -11,7 +12,7 @@ export class LocationsController {
   ) {}
 
   @Post()
-  async createLocation(@Body() location: Location): Promise<Location> {
+  async createLocation(@Body() location: LocationDto): Promise<Location> {
     return this.locationsService.createLocation(location);
   }
 
