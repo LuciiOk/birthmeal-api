@@ -163,7 +163,10 @@ export class CompaniesService {
           { new: true },
         )
         .populate('category');
-      return result;
+      return {
+        ...(await result).toObject(),
+        rating: await this.valorationService.getValorationByCompany(id),
+      };
     } catch (error) {
       throw new HttpException("Can't update company", 500);
     }
