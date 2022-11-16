@@ -174,6 +174,9 @@ export class CompaniesService {
 
   remove(id: string) {
     try {
+      // remove all locations of company
+      this.locationService.removeLocationsByCompany(id);
+
       return this.companyModel.findByIdAndRemove(id);
     } catch (error) {
       throw new NotFoundException(`Company #${id} not found`);
