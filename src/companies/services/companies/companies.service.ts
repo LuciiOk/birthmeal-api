@@ -115,6 +115,7 @@ export class CompaniesService {
       return {
         ...company.toObject(),
         locations,
+        rating: await this.valorationService.getValorationByCompany(newCompany._id),
       };
     } catch (error) {
       throw new HttpException("Can't create company", 500);
