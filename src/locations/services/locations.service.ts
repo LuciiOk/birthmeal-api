@@ -14,7 +14,7 @@ export class LocationsService {
     private readonly googleMapsService: GoogleMapsService,
   ) {}
 
-  async createLocation(location: Location): Promise<Location> {
+  async createLocation(location: LocationDto): Promise<Location> {
     const createdLocation = new this.locationModel(location);
 
     const { coordinates, address } =

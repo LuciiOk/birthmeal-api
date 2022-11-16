@@ -42,8 +42,6 @@ export class CategoriesService {
       const totalPages = Math.ceil(total / limit) || 1;
       const totalPerPage = result.length;
 
-      console.log(totalPages, totalPerPage, total, page, limit);
-
       return {
         data: result,
         total,

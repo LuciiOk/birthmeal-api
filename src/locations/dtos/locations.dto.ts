@@ -36,6 +36,14 @@ export class LocationDto {
   })
   readonly placeId: string;
 
+  @ApiProperty({
+    description: 'La comuna de la ubicación',
+  })
+  @IsString({
+    message: 'La comuna debe ser una cadena de texto',
+  })
+  readonly commune: string;
+
   @IsObject({
     message: 'La geolocalización debe ser un objeto',
   })
