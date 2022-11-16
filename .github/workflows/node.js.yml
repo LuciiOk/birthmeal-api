@@ -23,7 +23,7 @@ jobs:
         GITHUB_TOKEN: 
         JWT_SECRET: H!JS@G#FFG#s%dfg@sdfdgsdfagDFGDFDAH@#FJK@432?D
         JWT_EXPIRES_IN: 20h
-        GOOGLE_MAPS_ACCESS_KEY: AIzaSyDsadPAbIgJa8JNvCGwPWVBY0NUn5MKcoE
+        GOOGLE_MAPS_ACCESS_KEY: AIzaSyDTjbpApVgCX8A4I7IjCz6ziAPl5WF-eKo
         MONGO_INITDB_ROOT_USERNAME: birthmeal
         MONGO_INITDB_ROOT_PASSWORD: birthmeal
         MONGO_DB: Birthmeal
