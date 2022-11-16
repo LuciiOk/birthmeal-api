@@ -145,4 +145,9 @@ export class LocationsService {
       location.remove();
     });
   }
+
+  async removeLocationsByCompany(companyId: string) {
+    const locations = await this.getLocationsByCompany(companyId);
+    this.removeMany(locations);
+  }
 }
